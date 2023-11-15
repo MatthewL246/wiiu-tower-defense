@@ -8,9 +8,7 @@
             "preLaunchTask": "Build project",
             "request": "launch",
             "type": "node-terminal",
-            "env": {
-                "WIILOAD": "tcp:0.0.0.0"
-            }
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
