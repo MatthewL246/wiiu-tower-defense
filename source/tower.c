@@ -18,6 +18,10 @@ void AddTower(Point position)
         newTower.bulletsFired = &(Bullet){(Point){0, 0}, (Point){0, 0}, 5, 5, 1, 1};
         newTower.fireRate = 5;
 
+        Bullet* newTowerBullet = malloc(sizeof(Bullet));
+        *newTowerBullet = (Bullet){(Point){0, 0}, (Point){0, 0}, 5, 5, 1, 1};
+
+        newTower.bulletsFired = newTowerBullet;
         towers[towerCount] = newTower;
         towerCount++;
     }

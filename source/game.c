@@ -1,3 +1,4 @@
+#include <malloc.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -95,4 +96,13 @@ int GameLoop(VPADStatus status)
 
     gameLoopCounter++;
     return 0;
+}
+
+void GameShutdown()
+{
+    for (int i = 0; i < towerCount; i++)
+    {
+        free(towers[i].bulletsFired);
+        towers[i].bulletsFired = NULL;
+    }
 }
