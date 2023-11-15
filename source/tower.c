@@ -15,7 +15,6 @@ void AddTower(Point position)
         newTower.targetPosition = (Point){-20, -20};
         newTower.color = (Color){0, 255, 0};
         newTower.size = 10;
-        newTower.bulletsFired = &(Bullet){(Point){0, 0}, (Point){0, 0}, 5, 5, 1, 1};
         newTower.fireRate = 5;
 
         Bullet* newTowerBullet = malloc(sizeof(Bullet));
