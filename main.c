@@ -94,6 +94,7 @@ int main(void)
     while (WHBProcIsRunning())
     {
         /* Clear each buffer - the 0x... is an RGBX colour */
+        /* This appears to take about 38 ms of frametime */
         OSScreenClearBufferEx(SCREEN_TV, 0x00000000);
         OSScreenClearBufferEx(SCREEN_DRC, 0x00000000);
 
@@ -153,9 +154,9 @@ int main(void)
         }
 
         OSTick currentTick = OSGetTick();
-        OSTick frametime = OSTicksToMilliseconds(currentTick - lastTick);
-        char frametimeStr[50];
-        snprintf(frametimeStr, 50, "Frametime: %d ms", frametime);
+        OSTick frametime = OSTicksToMicroseconds(currentTick - lastTick);
+        char frametimeStr[20];
+        snprintf(frametimeStr, 20, "Frametime: %0.2f ms", frametime / 1000.0);
         OSScreenPutFontEx(SCREEN_DRC, 0, 0, frametimeStr);
         OSScreenPutFontEx(SCREEN_TV, 0, 0, frametimeStr);
         lastTick = currentTick;
