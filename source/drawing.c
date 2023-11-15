@@ -78,3 +78,11 @@ void DrawAllEnemies()
         DrawPoint(enemies[i].position, enemies[i].color, enemies[i].size, true);
     }
 }
+
+void DrawFrametime(OSTick frametimeMicroseconds)
+{
+    char frametimeStr[10];
+    snprintf(frametimeStr, 10, "%0.2f ms", frametimeMicroseconds / 1000.0);
+    OSScreenPutFontEx(SCREEN_DRC, 0, 0, frametimeStr);
+    OSScreenPutFontEx(SCREEN_TV, 0, 0, frametimeStr);
+}

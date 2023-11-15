@@ -1,3 +1,3 @@
-int GameLoop(VPADStatus status);
+int GameLoop(VPADStatus status, OSTick deltaTimeMicroseconds);
 
 void GameShutdown();

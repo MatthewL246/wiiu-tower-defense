@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <coreinit/time.h>
 #include <coreinit/screen.h>
 #include <vpad/input.h>
 #include <whb/log.h>
@@ -55,7 +56,7 @@ unsigned touchTimer = 0;
 const int touchDelay = 1;
 bool targetMode = false;
 
-int GameLoop(VPADStatus status)
+int GameLoop(VPADStatus status, OSTick deltaTimeMicroseconds)
 {
     VPADTouchData touchData = status.tpNormal;
     if (touchData.touched != 0)
@@ -93,6 +94,8 @@ int GameLoop(VPADStatus status)
     DrawAllTowers();
     DrawAllBullets();
     DrawAllEnemies();
+
+    DrawFrametime(deltaTimeMicroseconds);
 
     gameLoopCounter++;
     return 0;

@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <math.h>
-#include <time.h>
+#include <coreinit/time.h>
 #include <coreinit/cache.h>
 #include <coreinit/screen.h>
 #include <coreinit/thread.h>
@@ -141,8 +141,12 @@ int main(void)
         if (vpad_fatal)
             break;
 
+        OSTick currentTick = OSGetTick();
+        OSTick deltaTime = OSTicksToMicroseconds(currentTick - lastTick);
+        lastTick = currentTick;
+
         /* This is the actual game code. */
-        int gameLoopError = GameLoop(status);
+        int gameLoopError = GameLoop(status, deltaTime);
 
         if (gameLoopError)
         {
@@ -150,14 +154,6 @@ int main(void)
             WHBLogPrintf("Game loop error! %i", gameLoopError);
             break;
         }
-
-        OSTick currentTick = OSGetTick();
-        OSTick frametime = OSTicksToMicroseconds(currentTick - lastTick);
-        char frametimeStr[20];
-        snprintf(frametimeStr, 20, "Frametime: %0.2f ms", frametime / 1000.0);
-        OSScreenPutFontEx(SCREEN_DRC, 0, 0, frametimeStr);
-        OSScreenPutFontEx(SCREEN_TV, 0, 0, frametimeStr);
-        lastTick = currentTick;
 
         /* Flush all caches - read the tutorial, please! */
         DCFlushRange(tvBuffer, tvBufferSize);
@@ -180,6 +176,8 @@ int main(void)
         free(tvBuffer);
     if (drcBuffer)
         free(drcBuffer);
+
+    GameShutdown();
 
     /* Deinit everything */
     /* OSScreenShutdown() crashes here on Aroma. */
