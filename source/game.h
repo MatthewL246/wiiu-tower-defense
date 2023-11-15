@@ -1,0 +1,1 @@
+int GameLoop(VPADStatus status);

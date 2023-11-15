@@ -1,9 +1,7 @@
 #include <malloc.h>
 #include <stdbool.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <math.h>
-
 #include <time.h>
 #include <coreinit/cache.h>
 #include <coreinit/screen.h>
@@ -14,7 +12,7 @@
 #include <whb/log_udp.h>
 #include <whb/proc.h>
 
-#include "game.c"
+#include "game.h"
 
 /* Source: https://github.com/yawut/ProgrammingOnTheU */
 /* Additional example: https://github.com/devkitPro/wut/blob/master/samples/make/helloworld/source/main.c */

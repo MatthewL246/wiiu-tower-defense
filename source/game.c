@@ -1,16 +1,24 @@
-typedef struct
+#include <math.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <coreinit/screen.h>
+#include <vpad/input.h>
+#include <whb/log.h>
+
+typedef struct Point
 {
     int x;
     int y;
 } Point;
 
-typedef struct {
+typedef struct Color {
     char r;
     char g;
     char b;
 } Color;
 
-typedef struct {
+typedef struct Bullet {
     Point position;
     Point velocity;
     int size;
@@ -19,7 +27,7 @@ typedef struct {
     int health;
 } Bullet;
 
-typedef struct {
+typedef struct Tower {
     Point position;
     Point targetPosition;
     Color color;
@@ -28,7 +36,7 @@ typedef struct {
     int fireRate;
 } Tower;
 
-typedef struct {
+typedef struct Enemy {
     Point position;
     Color color;
     int size;
