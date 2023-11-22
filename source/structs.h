@@ -7,6 +7,12 @@ typedef struct Point
     int y;
 } Point;
 
+typedef struct Vector
+{
+    float x;
+    float y;
+} Vector;
+
 typedef struct Color
 {
     char r;

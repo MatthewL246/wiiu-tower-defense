@@ -1,4 +1,5 @@
 #include <malloc.h>
+#include <math.h>
 
 #include "tower.h"
 #include "bullet.h"
@@ -18,7 +19,12 @@ void AddTower(Point position)
         newTower.fireRate = 5;
 
         Bullet* newTowerBullet = malloc(sizeof(Bullet));
-        *newTowerBullet = (Bullet){(Point){0, 0}, (Point){0, 0}, 5, 5, 1, 1};
+        newTowerBullet->position = (Point){0, 0};
+        newTowerBullet->direction = (Vector){0, 0};
+        newTowerBullet->size = 5;
+        newTowerBullet->speed = 5;
+        newTowerBullet->damage = 1;
+        newTowerBullet->health = 1;
 
         newTower.bulletsFired = newTowerBullet;
         towers[towerCount] = newTower;
@@ -28,7 +34,20 @@ void AddTower(Point position)
 
 void SetTowerTarget(int towerIndex, Point targetPosition)
 {
-    towers[towerIndex].targetPosition = targetPosition;
+    Tower* tower = &towers[towerIndex];
+    tower->targetPosition = targetPosition;
+
+    // Calculate the direction vector from the tower to the target
+    Vector direction;
+    direction.x = tower->targetPosition.x - tower->position.x;
+    direction.y = tower->targetPosition.y - tower->position.y;
+
+    // Normalize the direction vector to get a unit vector
+    float length = sqrt(direction.x * direction.x + direction.y * direction.y);
+    direction.x = direction.x / length;
+    direction.y = direction.y / length;
+
+    tower->bulletsFired->direction = direction;
 }
 
 void FireAllTowers(unsigned gameLoopCounter)
