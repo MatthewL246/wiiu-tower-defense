@@ -6,7 +6,7 @@ project(wiiu-tower-defense LANGUAGES C)
 file(GLOB SOURCES "source/*.c" "source/*.h")
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
+target_compile_options(${PROJECT_NAME} PRIVATE -O2 -Wall -Wextra -pedantic)
 
 wut_create_rpx(${PROJECT_NAME})
 wut_create_wuhb(${PROJECT_NAME})
