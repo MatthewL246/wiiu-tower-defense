@@ -1,40 +1,46 @@
 #include <malloc.h>
 #include <math.h>
 
-#include "tower.h"
 #include "bullet.h"
+#include "tower.h"
 
-Tower towers[MAX_TOWERS];
-int towerCount = 0;
+Tower *towersHead = NULL;
+Tower *towersTail = NULL;
 
 void AddTower(Point position)
 {
-    if (towerCount < MAX_TOWERS)
+    Tower *newTower = malloc(sizeof(Tower));
+    newTower->position = position;
+    newTower->targetPosition = INVALID_TOWER_TARGET;
+    newTower->color = (Color){0, 255, 0};
+    newTower->size = 10;
+    newTower->fireRate = 5;
+
+    Bullet *newTowerBullet = malloc(sizeof(Bullet));
+    newTowerBullet->position = (Point){0, 0};
+    newTowerBullet->direction = (Vector){0, 0};
+    newTowerBullet->size = 5;
+    newTowerBullet->speed = 5;
+    newTowerBullet->damage = 1;
+    newTowerBullet->health = 1;
+
+    newTower->bulletsFired = newTowerBullet;
+    newTower->previous = towersTail;
+    newTower->next = NULL;
+
+    if (towersHead == NULL)
     {
-        Tower newTower;
-        newTower.position = position;
-        newTower.targetPosition = (Point){-20, -20};
-        newTower.color = (Color){0, 255, 0};
-        newTower.size = 10;
-        newTower.fireRate = 5;
-
-        Bullet* newTowerBullet = malloc(sizeof(Bullet));
-        newTowerBullet->position = (Point){0, 0};
-        newTowerBullet->direction = (Vector){0, 0};
-        newTowerBullet->size = 5;
-        newTowerBullet->speed = 5;
-        newTowerBullet->damage = 1;
-        newTowerBullet->health = 1;
-
-        newTower.bulletsFired = newTowerBullet;
-        towers[towerCount] = newTower;
-        towerCount++;
+        towersHead = newTower;
     }
+    else
+    {
+        towersTail->next = newTower;
+    }
+    towersTail = newTower;
 }
 
-void SetTowerTarget(int towerIndex, Point targetPosition)
+void SetTowerTarget(Tower *tower, Point targetPosition)
 {
-    Tower* tower = &towers[towerIndex];
     tower->targetPosition = targetPosition;
 
     // Calculate the direction vector from the tower to the target
@@ -50,16 +56,53 @@ void SetTowerTarget(int towerIndex, Point targetPosition)
     tower->bulletsFired->direction = direction;
 }
 
+void SetLastTowerTarget(Point targetPosition)
+{
+    SetTowerTarget(towersTail, targetPosition);
+}
+
+void RemoveTower(Tower *tower)
+{
+    // Set the previous tower's next
+    if (tower->previous)
+    {
+        tower->previous->next = tower->next;
+    }
+    else
+    {
+        // This is the head of the list
+        towersHead = tower->next;
+    }
+
+    // Set the next tower's previous
+    if (tower->next)
+    {
+        tower->next->previous = tower->previous;
+    }
+    else
+    {
+        // This is the tail of the list
+        towersTail = tower->previous;
+    }
+
+    free(tower->bulletsFired);
+    free(tower);
+}
+
 void FireAllTowers(unsigned gameLoopCounter)
 {
-    for (int i = 0; i < towerCount; i++)
+    Tower *currentTower = towersHead;
+
+    while (currentTower)
     {
-        if (towers[i].targetPosition.x != -20 && towers[i].targetPosition.y != -20)
+        if (!PointEquals(currentTower->targetPosition, INVALID_TOWER_TARGET))
         {
-            if (gameLoopCounter % (100 / towers[i].fireRate) == 0)
+            if (gameLoopCounter % (100 / currentTower->fireRate) == 0)
             {
-                AddBullet(towers[i]);
+                AddBullet(currentTower);
             }
         }
+
+        currentTower = currentTower->next;
     }
 }

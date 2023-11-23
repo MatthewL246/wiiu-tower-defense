@@ -12,13 +12,15 @@ typedef struct Bullet
     int speed;
     int damage;
     int health;
+    struct Bullet *previous;
+    struct Bullet *next;
 } Bullet;
 
-#define MAX_BULLETS 1000
-extern Bullet bullets[MAX_BULLETS];
-extern int bulletCount;
+extern Bullet *bulletsHead;
 
-void AddBullet(Tower fromTower);
+void AddBullet(Tower *fromTower);
+
+void RemoveBullet(Bullet *bullet);
 
 void MoveAllBullets();
 

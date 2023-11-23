@@ -1,41 +1,77 @@
+#include <malloc.h>
 #include <math.h>
 
 #include "bullet.h"
 #include "drawing.h"
 
-Bullet bullets[MAX_BULLETS];
-int bulletCount = 0;
+Bullet *bulletsHead = NULL;
+Bullet *bulletsTail = NULL;
 
-void AddBullet(Tower fromTower)
+void AddBullet(Tower *fromTower)
 {
-    if (bulletCount < MAX_BULLETS)
-    {
-        Bullet newBullet = *fromTower.bulletsFired;
-        newBullet.position = fromTower.position;
+    Bullet *newBullet = malloc(sizeof(Bullet));
+    *newBullet = *fromTower->bulletsFired;
+    newBullet->position = fromTower->position;
+    newBullet->previous = bulletsTail;
+    newBullet->next = NULL;
 
-        bullets[bulletCount] = newBullet;
-        bulletCount++;
+    if (bulletsHead == NULL)
+    {
+        bulletsHead = newBullet;
     }
+    else
+    {
+        bulletsTail->next = newBullet;
+    }
+    bulletsTail = newBullet;
+}
+
+void RemoveBullet(Bullet *bullet)
+{
+    // Set the previous bullet's next
+    if (bullet->previous)
+    {
+        bullet->previous->next = bullet->next;
+    }
+    else
+    {
+        // This is the head of the list
+        bulletsHead = bullet->next;
+    }
+
+    // Set the next bullet's previous
+    if (bullet->next)
+    {
+        bullet->next->previous = bullet->previous;
+    }
+    else
+    {
+        // This is the tail of the list
+        bulletsTail = bullet->previous;
+    }
+
+    free(bullet);
 }
 
 void MoveAllBullets()
 {
-    for (int i = 0; i < bulletCount; i++)
+    Bullet *currentBullet = bulletsHead;
+
+    while (currentBullet)
     {
-        Bullet* bullet = &bullets[i];
+        currentBullet->position.x += roundf(currentBullet->direction.x * currentBullet->speed);
+        currentBullet->position.y += roundf(currentBullet->direction.y * currentBullet->speed);
 
-        bullet->position.x += roundf(bullet->direction.x * bullet->speed);
-        bullet->position.y += roundf(bullet->direction.y * bullet->speed);
-
-        if (bullet->position.x >= DRC_SCREEN_WIDTH || bullet->position.y >= DRC_SCREEN_HEIGHT ||
-            bullet->position.x < 0 || bullet->position.y < 0)
+        if (currentBullet->position.x >= DRC_SCREEN_WIDTH || currentBullet->position.y >= DRC_SCREEN_HEIGHT ||
+            currentBullet->position.x < 0 || currentBullet->position.y < 0)
         {
-            for (int j = i; j < bulletCount - 1; j++)
-            {
-                bullets[j] = bullets[j + 1];
-            }
-            bulletCount--;
-            i--;
+            Bullet *nextBullet = currentBullet->next;
+            RemoveBullet(currentBullet);
+            currentBullet = nextBullet;
+        }
+        else
+        {
+            currentBullet = currentBullet->next;
         }
     }
 }

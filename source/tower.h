@@ -3,6 +3,8 @@
 
 #include "structs.h"
 
+#define INVALID_TOWER_TARGET (Point){-1, -1}
+
 typedef struct Bullet Bullet;
 
 typedef struct Tower
@@ -11,17 +13,19 @@ typedef struct Tower
     Point targetPosition;
     Color color;
     int size;
-    Bullet* bulletsFired;
+    Bullet *bulletsFired;
     int fireRate;
+    struct Tower *previous;
+    struct Tower *next;
 } Tower;
 
-#define MAX_TOWERS 100
-extern Tower towers[MAX_TOWERS];
-extern int towerCount;
+extern Tower *towersHead;
 
 void AddTower(Point position);
 
-void SetTowerTarget(int towerIndex, Point targetPosition);
+void RemoveTower(Tower *tower);
+
+void SetLastTowerTarget(Point targetPosition);
 
 void FireAllTowers(unsigned gameLoopCounter);
 

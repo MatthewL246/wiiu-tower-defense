@@ -10,13 +10,15 @@ typedef struct Enemy
     int size;
     int speed;
     int health;
+    struct Enemy *previous;
+    struct Enemy *next;
 } Enemy;
 
-#define MAX_ENEMIES 200
-extern Enemy enemies[MAX_ENEMIES];
-extern int enemyCount;
+extern Enemy *enemiesHead;
 
 void AddEnemy();
+
+void RemoveEnemy(Enemy *enemy);
 
 void MoveAllEnemies();
 

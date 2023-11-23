@@ -1,53 +1,52 @@
+#include <coreinit/screen.h>
+#include <coreinit/time.h>
 #include <malloc.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <coreinit/time.h>
-#include <coreinit/screen.h>
 #include <vpad/input.h>
 #include <whb/log.h>
 
-#include "structs.h"
 #include "bullet.h"
-#include "tower.h"
-#include "enemy.h"
 #include "drawing.h"
+#include "enemy.h"
+#include "structs.h"
+#include "tower.h"
 
 void CheckBulletEnemyCollisions()
 {
-    for (int i = 0; i < bulletCount; i++)
-    {
-        for (int j = 0; j < enemyCount; j++)
-        {
-            float dx = bullets[i].position.x - enemies[j].position.x;
-            float dy = bullets[i].position.y - enemies[j].position.y;
-            float distance = sqrt(dx * dx + dy * dy);
-            if (distance <= bullets[i].size + enemies[j].size)
-            {
-                bullets[i].health -= 1;
-                enemies[j].health -= bullets[i].damage;
+    Bullet *currentBullet = bulletsHead;
 
-                if (bullets[i].health <= 0)
+    while (currentBullet)
+    {
+        Enemy *currentEnemy = enemiesHead;
+
+        while (currentEnemy)
+        {
+            float dx = currentBullet->position.x - currentEnemy->position.x;
+            float dy = currentBullet->position.y - currentEnemy->position.y;
+            float distance = sqrt(dx * dx + dy * dy);
+
+            if (distance <= currentBullet->size + currentEnemy->size)
+            {
+                currentBullet->health -= 1;
+                currentEnemy->health -= currentBullet->damage;
+
+                if (currentBullet->health <= 0)
                 {
-                    for (int k = i; k < bulletCount - 1; k++)
-                    {
-                        bullets[k] = bullets[k + 1];
-                    }
-                    bulletCount--;
-                    i--;
+                    RemoveBullet(currentBullet);
                 }
-                if (enemies[j].health <= 0)
+                if (currentEnemy->health <= 0)
                 {
-                    for (int k = j; k < enemyCount - 1; k++)
-                    {
-                        enemies[k] = enemies[k + 1];
-                    }
-                    enemyCount--;
-                    j--;
+                    RemoveEnemy(currentEnemy);
                 }
             }
+
+            currentEnemy = currentEnemy->next;
         }
+
+        currentBullet = currentBullet->next;
     }
 }
 
@@ -71,7 +70,7 @@ int GameLoop(VPADStatus status, OSTick deltaTimeMicroseconds)
         }
         else if (touchTimer == touchDelay && targetMode)
         {
-            SetTowerTarget(towerCount - 1, screenTouchPoint);
+            SetLastTowerTarget(screenTouchPoint);
             targetMode = false;
         }
     }
@@ -103,9 +102,17 @@ int GameLoop(VPADStatus status, OSTick deltaTimeMicroseconds)
 
 void GameShutdown()
 {
-    for (int i = 0; i < towerCount; i++)
+    // Free all towers, bullets, and enemies
+    while (towersHead)
     {
-        free(towers[i].bulletsFired);
-        towers[i].bulletsFired = NULL;
+        RemoveTower(towersHead);
+    }
+    while (bulletsHead)
+    {
+        RemoveBullet(bulletsHead);
+    }
+    while (enemiesHead)
+    {
+        RemoveEnemy(enemiesHead);
     }
 }
