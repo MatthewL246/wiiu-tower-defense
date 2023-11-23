@@ -6,7 +6,8 @@
             "detail": "Build the project with CMake",
             "group": "build",
             "type": "shell",
-            "command": "cmake -S . -B build && cmake --build build"
+            "command": "cmake -S . -B build && cmake --build build",
+            "problemMatcher": "$gcc"
         }
     ]
 }

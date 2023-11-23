@@ -2,13 +2,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Upload to console",
-            "cwd": "${workspaceFolder}/build",
-            "command": "wiiload $(basename ${workspaceFolder}).rpx",
-            "preLaunchTask": "Build project",
-            "request": "launch",
+            "name": "Launch Cemu",
             "type": "node-terminal",
-            "envFile": "${workspaceFolder}/.env"
+            "request": "launch",
+            "preLaunchTask": "Build project",
+            "cwd": "${workspaceFolder}/build",
+            "envFile": "${workspaceFolder}/.env",
+            "command": "$CEMU_DIR/Cemu.exe -g $(basename ${workspaceFolder}).rpx"
+        },
+        {
+            "name": "Upload to console",
+            "type": "node-terminal",
+            "request": "launch",
+            "preLaunchTask": "Build project",
+            "cwd": "${workspaceFolder}/build",
+            "envFile": "${workspaceFolder}/.env",
+            "command": "wiiload $(basename ${workspaceFolder}).rpx"
         }
     ]
 }
