@@ -91,6 +91,10 @@ int main(void)
     good candidate for a loop */
     while (WHBProcIsRunning())
     {
+        OSTick currentTick = OSGetTick();
+        OSTick deltaTime = OSTicksToMicroseconds(currentTick - lastTick);
+        lastTick = currentTick;
+
         /* Clear each buffer - the 0x... is an RGBX colour */
         /* This appears to take about 38 ms of frametime */
         OSScreenClearBufferEx(SCREEN_TV, 0x00000000);
@@ -140,10 +144,6 @@ int main(void)
         the ProcUI loop and quit. */
         if (vpad_fatal)
             break;
-
-        OSTick currentTick = OSGetTick();
-        OSTick deltaTime = OSTicksToMicroseconds(currentTick - lastTick);
-        lastTick = currentTick;
 
         /* This is the actual game code. */
         int gameLoopError = GameLoop(status, deltaTime);
