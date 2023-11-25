@@ -19,6 +19,6 @@ void DrawAllBullets();
 
 void DrawAllEnemies();
 
-void DrawFrametime(OSTick frametimeMicroseconds);
+void DrawFrametime(OSTick deltaTime);
 
 #endif

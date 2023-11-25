@@ -91,8 +91,9 @@ void DrawAllEnemies()
     }
 }
 
-void DrawFrametime(OSTick frametimeMicroseconds)
+void DrawFrametime(OSTick deltaTime)
 {
+    unsigned frametimeMicroseconds = OSTicksToMicroseconds(deltaTime);
     char frametimeStr[10];
     snprintf(frametimeStr, 10, "%0.2f ms", frametimeMicroseconds / 1000.0);
     OSScreenPutFontEx(SCREEN_DRC, 0, 0, frametimeStr);

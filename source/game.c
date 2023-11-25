@@ -55,7 +55,7 @@ unsigned touchTimer = 0;
 const int touchDelay = 1;
 bool targetMode = false;
 
-int GameLoop(VPADStatus status, OSTick deltaTimeMicroseconds)
+int GameLoop(VPADStatus status, OSTick deltaTime)
 {
     VPADTouchData touchData = status.tpNormal;
     if (touchData.touched != 0)
@@ -94,7 +94,7 @@ int GameLoop(VPADStatus status, OSTick deltaTimeMicroseconds)
     DrawAllBullets();
     DrawAllEnemies();
 
-    DrawFrametime(deltaTimeMicroseconds);
+    DrawFrametime(deltaTime);
 
     gameLoopCounter++;
     return 0;

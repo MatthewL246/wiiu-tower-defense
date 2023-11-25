@@ -92,7 +92,7 @@ int main(void)
     while (WHBProcIsRunning())
     {
         OSTick currentTick = OSGetTick();
-        OSTick deltaTime = OSTicksToMicroseconds(currentTick - lastTick);
+        OSTick deltaTime = currentTick - lastTick;
         lastTick = currentTick;
 
         /* Clear each buffer - the 0x... is an RGBX colour */
@@ -163,8 +163,6 @@ int main(void)
         committing your graphics changes. */
         OSScreenFlipBuffersEx(SCREEN_TV);
         OSScreenFlipBuffersEx(SCREEN_DRC);
-
-        OSSleepTicks(OSMillisecondsToTicks(1));
     }
 
     /* Once we get here, ProcUI said we should quit. */
