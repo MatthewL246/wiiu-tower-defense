@@ -90,12 +90,3 @@ void DrawAllEnemies()
         currentEnemy = currentEnemy->next;
     }
 }
-
-void DrawFrametime(OSTick deltaTime)
-{
-    unsigned frametimeMicroseconds = OSTicksToMicroseconds(deltaTime);
-    char frametimeStr[10];
-    snprintf(frametimeStr, 10, "%0.2f ms", frametimeMicroseconds / 1000.0);
-    OSScreenPutFontEx(SCREEN_DRC, 0, 0, frametimeStr);
-    OSScreenPutFontEx(SCREEN_TV, 0, 0, frametimeStr);
-}

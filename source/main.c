@@ -91,14 +91,17 @@ int main(void)
     good candidate for a loop */
     while (WHBProcIsRunning())
     {
+        ProfilerStartFrame();
         OSTick currentTick = OSGetTick();
         OSTick deltaTime = currentTick - lastTick;
         lastTick = currentTick;
 
         /* Clear each buffer - the 0x... is an RGBX colour */
-        /* This appears to take about 38 ms of frametime */
+        /* This appears to take about 36 ms of frametime on a console */
         OSScreenClearBufferEx(SCREEN_TV, 0x00000000);
         OSScreenClearBufferEx(SCREEN_DRC, 0x00000000);
+        ProfilerLogTime("Frametime", deltaTime);
+        ProfilerLog("Clearing buffers");
 
         /* Print some text. Coordinates are (columns, rows). */
         /* Read button, touch and sensor data from the Gamepad */
@@ -145,8 +148,12 @@ int main(void)
         if (vpad_fatal)
             break;
 
+        ProfilerLog("Reading VPAD");
+
         /* This is the actual game code. */
         int gameLoopError = GameLoop(status, deltaTime);
+
+        ProfilerLog("Game loop");
 
         if (gameLoopError)
         {

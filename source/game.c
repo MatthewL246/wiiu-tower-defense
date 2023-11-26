@@ -94,8 +94,6 @@ int GameLoop(VPADStatus status, OSTick deltaTime)
     DrawAllBullets();
     DrawAllEnemies();
 
-    DrawFrametime(deltaTime);
-
     gameLoopCounter++;
     return 0;
 }
@@ -115,4 +113,30 @@ void GameShutdown()
     {
         RemoveEnemy(enemiesHead);
     }
+}
+
+int profilerMessageCounter = 0;
+OSTick fromTime = 0;
+
+void ProfilerStartFrame()
+{
+    profilerMessageCounter = 0;
+    fromTime = OSGetTick();
+}
+
+void ProfilerLogTime(char *title, OSTick time)
+{
+    unsigned frametimeMicroseconds = OSTicksToMicroseconds(time);
+    char profilerLogString[100];
+    snprintf(profilerLogString, 100, "%s: %.2f ms", title, frametimeMicroseconds / 1000.0);
+    OSScreenPutFontEx(SCREEN_DRC, 0, profilerMessageCounter, profilerLogString);
+    OSScreenPutFontEx(SCREEN_TV, 0, profilerMessageCounter, profilerLogString);
+    profilerMessageCounter++;
+}
+
+void ProfilerLog(char *title)
+{
+    OSTick time = OSGetTick();
+    ProfilerLogTime(title, time - fromTime);
+    fromTime = time;
 }

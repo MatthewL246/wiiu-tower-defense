@@ -19,6 +19,4 @@ void DrawAllBullets();
 
 void DrawAllEnemies();
 
-void DrawFrametime(OSTick deltaTime);
-
 #endif
