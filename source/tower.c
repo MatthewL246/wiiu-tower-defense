@@ -1,8 +1,8 @@
-#include <malloc.h>
-#include <math.h>
+#include "tower.h"
 
 #include "bullet.h"
-#include "tower.h"
+#include <malloc.h>
+#include <math.h>
 
 Tower *towersHead = NULL;
 Tower *towersTail = NULL;

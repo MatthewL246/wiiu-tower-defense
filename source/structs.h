@@ -1,5 +1,4 @@
-#ifndef STRUCTS_H
-#define STRUCTS_H
+#pragma once
 
 #include <stdbool.h>
 
@@ -27,5 +26,3 @@ typedef struct Color
 } Color;
 
 bool ColorEquals(Color a, Color b);
-
-#endif

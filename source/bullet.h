@@ -1,5 +1,4 @@
-#ifndef BULLET_H
-#define BULLET_H
+#pragma once
 
 #include "structs.h"
 #include "tower.h"
@@ -22,6 +21,4 @@ void AddBullet(Tower *fromTower);
 
 void RemoveBullet(Bullet *bullet);
 
-void MoveAllBullets();
-
-#endif
+void MoveAllBullets(void);

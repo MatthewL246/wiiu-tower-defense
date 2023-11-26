@@ -1,6 +1,6 @@
-#include <stdbool.h>
-
 #include "structs.h"
+
+#include <stdbool.h>
 
 bool PointEquals(Point a, Point b)
 {

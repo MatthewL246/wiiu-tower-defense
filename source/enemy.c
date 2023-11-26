@@ -1,12 +1,12 @@
-#include <malloc.h>
+#include "enemy.h"
 
 #include "drawing.h"
-#include "enemy.h"
+#include <malloc.h>
 
 Enemy *enemiesHead = NULL;
 Enemy *enemiesTail = NULL;
 
-void AddEnemy()
+void AddEnemy(void)
 {
     Enemy *newEnemy = malloc(sizeof(Enemy));
     newEnemy->position = (Point){0, DRC_SCREEN_HEIGHT / 2};
@@ -55,7 +55,7 @@ void RemoveEnemy(Enemy *enemy)
     free(enemy);
 }
 
-void MoveAllEnemies()
+void MoveAllEnemies(void)
 {
     Enemy *currentEnemy = enemiesHead;
 

@@ -1,12 +1,12 @@
+#include "drawing.h"
+
+#include "bullet.h"
+#include "enemy.h"
+#include "tower.h"
 #include <coreinit/screen.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
-
-#include "bullet.h"
-#include "drawing.h"
-#include "enemy.h"
-#include "tower.h"
 
 const int DRC_TOUCH_TOP = 3900;
 const int DRC_TOUCH_BOTTOM = 180;
@@ -54,7 +54,7 @@ void DrawPoint(Point point, Color color, int size, bool drawOnBothScreens)
     }
 }
 
-void DrawAllTowers()
+void DrawAllTowers(void)
 {
     Tower *currentTower = towersHead;
 
@@ -69,7 +69,7 @@ void DrawAllTowers()
     }
 }
 
-void DrawAllBullets()
+void DrawAllBullets(void)
 {
     Bullet *currentBullet = bulletsHead;
 
@@ -80,7 +80,7 @@ void DrawAllBullets()
     }
 }
 
-void DrawAllEnemies()
+void DrawAllEnemies(void)
 {
     Enemy *currentEnemy = enemiesHead;
 

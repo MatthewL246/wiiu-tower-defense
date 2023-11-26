@@ -1,8 +1,13 @@
+#pragma once
+
+#include <coreinit/time.h>
+#include <vpad/input.h>
+
 int GameLoop(VPADStatus status, OSTick deltaTime);
 
-void GameShutdown();
+void GameShutdown(void);
 
-void ProfilerStartFrame();
+void ProfilerStartFrame(void);
 
 void ProfilerLog(char *title);
 

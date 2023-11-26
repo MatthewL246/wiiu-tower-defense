@@ -1,3 +1,10 @@
+#include "game.h"
+
+#include "bullet.h"
+#include "drawing.h"
+#include "enemy.h"
+#include "structs.h"
+#include "tower.h"
 #include <coreinit/screen.h>
 #include <coreinit/time.h>
 #include <malloc.h>
@@ -8,13 +15,7 @@
 #include <vpad/input.h>
 #include <whb/log.h>
 
-#include "bullet.h"
-#include "drawing.h"
-#include "enemy.h"
-#include "structs.h"
-#include "tower.h"
-
-void CheckBulletEnemyCollisions()
+void CheckBulletEnemyCollisions(void)
 {
     Bullet *currentBullet = bulletsHead;
 
@@ -98,7 +99,7 @@ int GameLoop(VPADStatus status, OSTick deltaTime)
     return 0;
 }
 
-void GameShutdown()
+void GameShutdown(void)
 {
     // Free all towers, bullets, and enemies
     while (towersHead)
@@ -118,7 +119,7 @@ void GameShutdown()
 int profilerMessageCounter = 0;
 OSTick fromTime = 0;
 
-void ProfilerStartFrame()
+void ProfilerStartFrame(void)
 {
     profilerMessageCounter = 0;
     fromTime = OSGetTick();
@@ -128,7 +129,7 @@ void ProfilerLogTime(char *title, OSTick time)
 {
     unsigned frametimeMicroseconds = OSTicksToMicroseconds(time);
     char profilerLogString[100];
-    snprintf(profilerLogString, 100, "%s: %.2f ms", title, frametimeMicroseconds / 1000.0);
+    snprintf(profilerLogString, sizeof(profilerLogString), "%s: %.2f ms", title, frametimeMicroseconds / 1000.0);
     OSScreenPutFontEx(SCREEN_DRC, 0, profilerMessageCounter, profilerLogString);
     OSScreenPutFontEx(SCREEN_TV, 0, profilerMessageCounter, profilerLogString);
     profilerMessageCounter++;

@@ -1,9 +1,9 @@
-#ifndef TOWER_H
-#define TOWER_H
+#pragma once
 
 #include "structs.h"
 
-#define INVALID_TOWER_TARGET (Point){-1, -1}
+#define INVALID_TOWER_TARGET \
+    (Point) { -1, -1 }
 
 typedef struct Bullet Bullet;
 
@@ -28,5 +28,3 @@ void RemoveTower(Tower *tower);
 void SetLastTowerTarget(Point targetPosition);
 
 void FireAllTowers(unsigned gameLoopCounter);
-
-#endif

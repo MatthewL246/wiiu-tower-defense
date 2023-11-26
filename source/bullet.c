@@ -1,8 +1,8 @@
+#include "bullet.h"
+
+#include "drawing.h"
 #include <malloc.h>
 #include <math.h>
-
-#include "bullet.h"
-#include "drawing.h"
 
 Bullet *bulletsHead = NULL;
 Bullet *bulletsTail = NULL;
@@ -53,7 +53,7 @@ void RemoveBullet(Bullet *bullet)
     free(bullet);
 }
 
-void MoveAllBullets()
+void MoveAllBullets(void)
 {
     Bullet *currentBullet = bulletsHead;
 

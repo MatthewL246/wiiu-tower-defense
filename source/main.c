@@ -1,11 +1,11 @@
-#include <malloc.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <math.h>
-#include <coreinit/time.h>
 #include <coreinit/cache.h>
 #include <coreinit/screen.h>
 #include <coreinit/thread.h>
+#include <coreinit/time.h>
+#include <malloc.h>
+#include <math.h>
+#include <stdbool.h>
+#include <stdio.h>
 #include <vpad/input.h>
 #include <whb/log.h>
 #include <whb/log_cafe.h>

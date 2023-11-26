@@ -1,5 +1,4 @@
-#ifndef ENEMY_H
-#define ENEMY_H
+#pragma once
 
 #include "structs.h"
 
@@ -16,10 +15,8 @@ typedef struct Enemy
 
 extern Enemy *enemiesHead;
 
-void AddEnemy();
+void AddEnemy(void);
 
 void RemoveEnemy(Enemy *enemy);
 
-void MoveAllEnemies();
-
-#endif
+void MoveAllEnemies(void);
