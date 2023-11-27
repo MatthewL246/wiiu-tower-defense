@@ -2,22 +2,126 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Cemu",
-            "type": "node-terminal",
+            // Don't use the Cemu configurations individually, use the compound
+            // to run and debug Cemu at the same time. If you just want to run
+            // Cemu, use the "Run Cemu" task instead.
+            "name": "Debug Cemu",
+            "presentation": {
+                "hidden": true
+            },
+            "type": "cppdbg",
             "request": "launch",
             "preLaunchTask": "Build project",
-            "cwd": "${workspaceFolder}/build",
-            "envFile": "${workspaceFolder}/.env",
-            "command": "$CEMU_DIR/Cemu.exe -g $(basename ${workspaceFolder}).rpx"
+            "program": "${workspaceFolder}/build/wiiu-tower-defense.elf",
+            "cwd": "${fileDirname}",
+            "miDebuggerPath": "${env:DEVKITPPC}/bin/powerpc-eabi-gdb",
+            "MIMode": "gdb",
+            "miDebuggerServerAddress": "localhost:1337",
+            "setupCommands": [
+                {
+                    "description": "Set architecture to PowerPC",
+                    "text": "-gdb-set arch powerpc:750"
+                },
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
         },
         {
-            "name": "Upload to console",
+            // See the note for "Debug Cemu" above. Make sure to exit Cemu by
+            // closing the window instead of using the stop button in VS Code.
+            "name": "Run Cemu",
+            "presentation": {
+                "hidden": true
+            },
             "type": "node-terminal",
             "request": "launch",
             "preLaunchTask": "Build project",
-            "cwd": "${workspaceFolder}/build",
-            "envFile": "${workspaceFolder}/.env",
-            "command": "wiiload $(basename ${workspaceFolder}).rpx"
+            "command": "${config:cemu_path} -g build/$(basename ${workspaceFolder}).rpx --enable-gdbstub && exit"
+        },
+        {
+            // This is a dummy configuration that just runs the gdbstub task and
+            // then resumes execution on the console.
+            "name": "Start gdbstub on console",
+            "type": "node-terminal",
+            "request": "launch",
+            "preLaunchTask": "Start gdbstub on console",
+            "command": "exit",
+            "postDebugTask": "Resume console execution"
+        },
+        {
+            // See https://github.com/wiiu-env/gdbstub_plugin#usage
+            // Run the "Start gdbstub on console" configuration before running
+            // this debug configuration for the first time after each boot.
+            // Unfortunately, the gdbstub plugin will randomly stop working
+            // sometimes, which causes the error "Remote replied unexpectedly to
+            // 'vMustReplyEmpty'" until the console is restarted.
+            "name": "Debug on console",
+            "type": "cppdbg",
+            "request": "launch",
+            "preLaunchTask": "Upload to console",
+            "program": "${workspaceFolder}/build/wiiu-tower-defense.elf",
+            "cwd": "${fileDirname}",
+            "miDebuggerPath": "${env:DEVKITPPC}/bin/powerpc-eabi-gdb",
+            "MIMode": "gdb",
+            "miDebuggerServerAddress": "${config:console_ip}:3000",
+            "serverLaunchTimeout": 60000,
+            "setupCommands": [
+                {
+                    "description": "Set architecture to PowerPC",
+                    "text": "-gdb-set arch powerpc:750"
+                },
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set remote timeout",
+                    "text": "-gdb-set remotetimeout 60"
+                },
+                {
+                    "description": "Set TCP connect timeout",
+                    "text": "-gdb-set tcp connect-timeout 60"
+                },
+                {
+                    "description": "Print thread events",
+                    "text": "-gdb-set print thread-events on"
+                },
+                {
+                    "description": "Disassemble next line",
+                    "text": "-gdb-set disassemble-next-line on"
+                },
+                {
+                    "description": "Set remote hardware watchpoint limit",
+                    "text": "-gdb-set remote hardware-watchpoint-limit 1"
+                },
+                {
+                    "description": "Set remote hardware breakpoint limit",
+                    "text": "-gdb-set remote hardware-breakpoint-limit 1"
+                }
+            ],
+            "postDebugTask": "Resume console execution"
+        }
+    ],
+    "compounds": [
+        {
+            // This is allows Cemu to run in the background while debugging
+            "name": "Debug with Cemu",
+            "configurations": ["Debug Cemu", "Run Cemu"],
+            "presentation": {
+                "order": 1
+            }
         }
     ]
 }

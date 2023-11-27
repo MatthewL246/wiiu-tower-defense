@@ -3,11 +3,46 @@
     "tasks": [
         {
             "label": "Build project",
-            "detail": "Build the project with CMake",
-            "group": "build",
+            "detail": "Builds the project with CMake",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "type": "shell",
             "command": "cmake -S . -B build && cmake --build build",
-            "problemMatcher": "$gcc"
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            // Make sure to set the Cemu executable path in .vscode/settings.json
+            "label": "Launch Cemu",
+            "detail": "Launches the game in the Cemu emulator",
+            "dependsOn": "Build project",
+            "type": "shell",
+            "command": "${config:cemu_path} -g build/$(basename ${workspaceFolder}).rpx",
+            "problemMatcher": []
+        },
+        {
+            // Make sure to set the console IP address in .vscode/settings.json
+            "label": "Upload to console",
+            "detail": "Uploads the game to a Wii U console",
+            "dependsOn": "Build project",
+            "type": "shell",
+            "command": "WIILOAD=tcp:${config:console_ip} wiiload build/$(basename ${workspaceFolder}).rpx && sleep 5",
+            "problemMatcher": []
+        },
+        {
+            "label": "Start gdbstub on console",
+            "detail": "Uploads the gdbstub plugin to the Wii U console",
+            "type": "shell",
+            "command": "if [ ! -f ./build/gdbstub.wps ]; then curl -L https://github.com/wiiu-env/gdbstub_plugin/releases/download/v0.1/gdbstub_plugin_v0_1.zip -o gdbstub.zip && unzip gdbstub.zip -d build && rm gdbstub.zip; fi && WIILOAD=tcp:${config:console_ip} wiiload build/gdbstub.wps",
+            "problemMatcher": []
+        },
+        {
+            "label": "Resume console execution",
+            "detail": "Prevents the console from getting stuck waiting for the debugger after it detaches",
+            "type": "shell",
+            "command": "${env:DEVKITPPC}/bin/powerpc-eabi-gdb -batch -ex \"set remotetimeout 60\" -ex \"set tcp connect-timeout 60\" -ex \"target remote ${config:console_ip}:3000\" -ex continue -ex quit",
+            "problemMatcher": []
         }
     ]
 }

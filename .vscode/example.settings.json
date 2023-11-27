@@ -1,0 +1,8 @@
+{
+    // Copy this file to .vscode/settings.json to configure tasks and debugging
+    // The local IP address of the Wii U console, used for wiiload and debugging
+    "console_ip": "192.168.x.x",
+    // The path to the Cemu executable, used for running and debugging
+    // If you are using WSL, this must be a path relative to the WSL root (/mnt/c/)
+    "cemu_path": "/path/to/Cemu"
+}
