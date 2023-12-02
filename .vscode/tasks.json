@@ -33,6 +33,7 @@
         {
             "label": "Start gdbstub on console",
             "detail": "Uploads the gdbstub plugin to the Wii U console",
+            "dependsOn": "Upload to console",
             "type": "shell",
             "command": "if [ ! -f ./build/gdbstub.wps ]; then curl -L https://github.com/wiiu-env/gdbstub_plugin/releases/download/v0.1/gdbstub_plugin_v0_1.zip -o gdbstub.zip && unzip gdbstub.zip -d build && rm gdbstub.zip; fi && WIILOAD=tcp:${config:console_ip} wiiload build/gdbstub.wps",
             "problemMatcher": []
