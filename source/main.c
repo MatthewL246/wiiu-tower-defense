@@ -92,9 +92,9 @@ int main(void)
     while (WHBProcIsRunning())
     {
         ProfilerStartFrame();
-        OSTick currentTick = OSGetTick();
-        OSTick deltaTime = currentTick - lastTick;
-        lastTick = currentTick;
+        OSTick startTick = OSGetTick();
+        OSTick deltaTime = startTick - lastTick;
+        lastTick = startTick;
 
         /* Clear each buffer - the 0x... is an RGBX colour */
         /* This appears to take about 36 ms of frametime on a console */
@@ -170,6 +170,15 @@ int main(void)
         committing your graphics changes. */
         OSScreenFlipBuffersEx(SCREEN_TV);
         OSScreenFlipBuffersEx(SCREEN_DRC);
+
+        /* Sleep to set a FPS cap of 60. */
+        OSTick endTick = OSGetTick();
+        OSTick frameTime = endTick - startTick;
+        OSTick targetFrametime = OSMillisecondsToTicks((1 / 60.0) * 1000);
+        if (frameTime < targetFrametime)
+        {
+            OSSleepTicks(targetFrametime - frameTime);
+        }
     }
 
     /* Once we get here, ProcUI said we should quit. */
