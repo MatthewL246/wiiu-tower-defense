@@ -21,10 +21,10 @@ typedef struct Tower
 
 extern Tower *towersHead;
 
-void AddTower(Point position);
+int AddTower(Point position);
 
 void RemoveTower(Tower *tower);
 
 void SetLastTowerTarget(Point targetPosition);
 
-void FireAllTowers(unsigned gameLoopCounter);
+int FireAllTowers(unsigned gameLoopCounter);

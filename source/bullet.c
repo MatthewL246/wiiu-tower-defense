@@ -3,13 +3,20 @@
 #include "drawing.h"
 #include <malloc.h>
 #include <math.h>
+#include <whb/log.h>
 
 Bullet *bulletsHead = NULL;
 Bullet *bulletsTail = NULL;
 
-void AddBullet(Tower *fromTower)
+int AddBullet(Tower *fromTower)
 {
     Bullet *newBullet = malloc(sizeof(Bullet));
+    if (!newBullet)
+    {
+        WHBLogPrint("Out of memory in AddBullet (newBullet)!");
+        return -1;
+    }
+
     *newBullet = *fromTower->bulletsFired;
     newBullet->position = fromTower->position;
     newBullet->previous = bulletsTail;
@@ -24,6 +31,8 @@ void AddBullet(Tower *fromTower)
         bulletsTail->next = newBullet;
     }
     bulletsTail = newBullet;
+
+    return 0;
 }
 
 void RemoveBullet(Bullet *bullet)

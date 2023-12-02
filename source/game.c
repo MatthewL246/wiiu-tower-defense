@@ -66,7 +66,12 @@ int GameLoop(VPADStatus status, OSTick deltaTime)
         touchTimer++;
         if (touchTimer == touchDelay && !targetMode)
         {
-            AddTower(screenTouchPoint);
+            int result = AddTower(screenTouchPoint);
+            if (result != 0)
+            {
+                WHBLogPrintf("AddTower failed with error code %d.", result);
+                return result;
+            }
             targetMode = true;
         }
         else if (touchTimer == touchDelay && targetMode)
@@ -82,10 +87,20 @@ int GameLoop(VPADStatus status, OSTick deltaTime)
 
     if (gameLoopCounter % 100 == 0)
     {
-        AddEnemy();
+        int result = AddEnemy();
+        if (result != 0)
+        {
+            WHBLogPrintf("AddEnemy failed with error code %d.", result);
+            return result;
+        }
     }
 
-    FireAllTowers(gameLoopCounter);
+    int result = FireAllTowers(gameLoopCounter);
+    if (result != 0)
+    {
+        WHBLogPrintf("FireAllTowers failed with error code %d.", result);
+        return result;
+    }
 
     MoveAllEnemies();
     MoveAllBullets();

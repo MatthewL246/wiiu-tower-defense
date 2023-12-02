@@ -3,13 +3,20 @@
 #include "bullet.h"
 #include <malloc.h>
 #include <math.h>
+#include <whb/log.h>
 
 Tower *towersHead = NULL;
 Tower *towersTail = NULL;
 
-void AddTower(Point position)
+int AddTower(Point position)
 {
     Tower *newTower = malloc(sizeof(Tower));
+    if (!newTower)
+    {
+        WHBLogPrint("Out of memory in AddTower (newTower)!");
+        return -1;
+    }
+
     newTower->position = position;
     newTower->targetPosition = INVALID_TOWER_TARGET;
     newTower->color = (Color){0, 255, 0};
@@ -17,6 +24,13 @@ void AddTower(Point position)
     newTower->fireRate = 5;
 
     Bullet *newTowerBullet = malloc(sizeof(Bullet));
+    if (!newTowerBullet)
+    {
+        WHBLogPrint("Out of memory in AddTower (newTowerBullet)!");
+        free(newTower);
+        return -1;
+    }
+
     newTowerBullet->position = (Point){0, 0};
     newTowerBullet->direction = (Vector){0, 0};
     newTowerBullet->size = 5;
@@ -37,6 +51,8 @@ void AddTower(Point position)
         towersTail->next = newTower;
     }
     towersTail = newTower;
+
+    return 0;
 }
 
 void SetTowerTarget(Tower *tower, Point targetPosition)
@@ -89,7 +105,7 @@ void RemoveTower(Tower *tower)
     free(tower);
 }
 
-void FireAllTowers(unsigned gameLoopCounter)
+int FireAllTowers(unsigned gameLoopCounter)
 {
     Tower *currentTower = towersHead;
 
@@ -99,10 +115,17 @@ void FireAllTowers(unsigned gameLoopCounter)
         {
             if (gameLoopCounter % (100 / currentTower->fireRate) == 0)
             {
-                AddBullet(currentTower);
+                int result = AddBullet(currentTower);
+                if (result != 0)
+                {
+                    WHBLogPrintf("AddBullet failed with error code %d.", result);
+                    return result;
+                }
             }
         }
 
         currentTower = currentTower->next;
     }
+
+    return 0;
 }

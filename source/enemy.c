@@ -2,13 +2,20 @@
 
 #include "drawing.h"
 #include <malloc.h>
+#include <whb/log.h>
 
 Enemy *enemiesHead = NULL;
 Enemy *enemiesTail = NULL;
 
-void AddEnemy(void)
+int AddEnemy(void)
 {
     Enemy *newEnemy = malloc(sizeof(Enemy));
+    if (!newEnemy)
+    {
+        WHBLogPrint("Out of memory in AddEnemy (newEnemy)!");
+        return -1;
+    }
+
     newEnemy->position = (Point){0, DRC_SCREEN_HEIGHT / 2};
     newEnemy->color = (Color){255, 0, 0};
     newEnemy->size = 20;
@@ -26,6 +33,8 @@ void AddEnemy(void)
         enemiesTail->next = newEnemy;
     }
     enemiesTail = newEnemy;
+
+    return 0;
 }
 
 void RemoveEnemy(Enemy *enemy)

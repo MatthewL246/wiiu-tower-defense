@@ -15,7 +15,7 @@ typedef struct Enemy
 
 extern Enemy *enemiesHead;
 
-void AddEnemy(void);
+int AddEnemy(void);
 
 void RemoveEnemy(Enemy *enemy);
 

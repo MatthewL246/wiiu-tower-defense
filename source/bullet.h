@@ -17,7 +17,7 @@ typedef struct Bullet
 
 extern Bullet *bulletsHead;
 
-void AddBullet(Tower *fromTower);
+int AddBullet(Tower *fromTower);
 
 void RemoveBullet(Bullet *bullet);
 
