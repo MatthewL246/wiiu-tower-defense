@@ -78,6 +78,12 @@ void SetLastTowerTarget(Point targetPosition)
 
 void RemoveTower(Tower *tower)
 {
+    if (!tower)
+    {
+        WHBLogPrint("Attempted to remove NULL tower!");
+        return;
+    }
+
     // Set the previous tower's next
     if (tower->previous)
     {

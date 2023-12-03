@@ -53,6 +53,12 @@ int AddEnemy(void)
 
 void RemoveEnemy(Enemy *enemy)
 {
+    if (!enemy)
+    {
+        WHBLogPrint("Attempted to remove NULL enemy!");
+        return;
+    }
+
     // Set the previous enemy's next
     if (enemy->previous)
     {

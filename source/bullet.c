@@ -37,6 +37,12 @@ int AddBullet(Tower *fromTower)
 
 void RemoveBullet(Bullet *bullet)
 {
+    if (!bullet)
+    {
+        WHBLogPrint("Attempted to remove NULL bullet!");
+        return;
+    }
+
     // Set the previous bullet's next
     if (bullet->previous)
     {
