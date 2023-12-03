@@ -18,7 +18,7 @@ int AddTower(Point position)
     }
 
     newTower->position = position;
-    newTower->targetPosition = INVALID_TOWER_TARGET;
+    newTower->targetPosition = INVALID_POINT;
     newTower->color = (Color){0, 255, 0};
     newTower->size = 10;
     newTower->fireRate = 5;
@@ -111,7 +111,7 @@ int FireAllTowers(unsigned gameLoopCounter)
 
     while (currentTower)
     {
-        if (!PointEquals(currentTower->targetPosition, INVALID_TOWER_TARGET))
+        if (!PointEquals(currentTower->targetPosition, INVALID_POINT))
         {
             if (gameLoopCounter % (100 / currentTower->fireRate) == 0)
             {

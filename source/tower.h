@@ -2,9 +2,6 @@
 
 #include "structs.h"
 
-#define INVALID_TOWER_TARGET \
-    (Point) { -1, -1 }
-
 typedef struct Bullet Bullet;
 
 typedef struct Tower

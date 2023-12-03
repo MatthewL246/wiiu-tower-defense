@@ -11,6 +11,8 @@ Point MapTouchToDrcScreen(int touchX, int touchY);
 
 void DrawPoint(Point point, Color color, int size, bool drawOnBothScreens);
 
+void DrawEnemyPath(const Point *path);
+
 void DrawAllTowers(void);
 
 void DrawAllBullets(void);

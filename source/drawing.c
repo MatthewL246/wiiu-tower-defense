@@ -7,6 +7,7 @@
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 const int DRC_TOUCH_TOP = 3900;
 const int DRC_TOUCH_BOTTOM = 180;
@@ -54,6 +55,32 @@ void DrawPoint(Point point, Color color, int size, bool drawOnBothScreens)
     }
 }
 
+void DrawEnemyPath(const Point *path)
+{
+    int i = 0;
+    while (!PointEquals(path[i + 1], INVALID_POINT))
+    {
+        Point currentPoint = path[i];
+        Point target = path[i + 1];
+        Color pathColor = (Color){50, 50, 50};
+
+        while (!PointEquals(currentPoint, target))
+        {
+            DrawPoint(currentPoint, pathColor, 5, true);
+            if (currentPoint.x != target.x)
+            {
+                currentPoint.x += target.x > currentPoint.x ? 1 : -1;
+            }
+            if (currentPoint.y != target.y)
+            {
+                currentPoint.y += target.y > currentPoint.y ? 1 : -1;
+            }
+        }
+
+        i++;
+    }
+}
+
 void DrawAllTowers(void)
 {
     Tower *currentTower = towersHead;
@@ -61,7 +88,7 @@ void DrawAllTowers(void)
     while (currentTower)
     {
         DrawPoint(currentTower->position, currentTower->color, currentTower->size, true);
-        if (!PointEquals(currentTower->targetPosition, INVALID_TOWER_TARGET))
+        if (!PointEquals(currentTower->targetPosition, INVALID_POINT))
         {
             DrawPoint(currentTower->targetPosition, (Color){255, 155, 0}, 10, true);
         }

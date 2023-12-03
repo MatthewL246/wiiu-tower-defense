@@ -2,10 +2,22 @@
 
 #include "drawing.h"
 #include <malloc.h>
+#include <stdlib.h>
 #include <whb/log.h>
 
 Enemy *enemiesHead = NULL;
 Enemy *enemiesTail = NULL;
+
+const Point enemyPath[] = {
+    {0, DRC_SCREEN_HEIGHT / 2},
+    {DRC_SCREEN_WIDTH / 4, DRC_SCREEN_HEIGHT},
+    {DRC_SCREEN_WIDTH / 4, DRC_SCREEN_HEIGHT / 2},
+    {DRC_SCREEN_WIDTH / 2, DRC_SCREEN_HEIGHT / 2},
+    {DRC_SCREEN_WIDTH / 2, DRC_SCREEN_HEIGHT},
+    {DRC_SCREEN_WIDTH * 3 / 4, 0},
+    {DRC_SCREEN_WIDTH / 2, DRC_SCREEN_HEIGHT * 1 / 3},
+    {DRC_SCREEN_WIDTH, DRC_SCREEN_HEIGHT / 2},
+    INVALID_POINT};
 
 int AddEnemy(void)
 {
@@ -16,11 +28,12 @@ int AddEnemy(void)
         return -1;
     }
 
-    newEnemy->position = (Point){0, DRC_SCREEN_HEIGHT / 2};
+    newEnemy->position = enemyPath[0];
     newEnemy->color = (Color){255, 0, 0};
     newEnemy->size = 20;
     newEnemy->speed = 1;
     newEnemy->health = 1;
+    newEnemy->pathIndex = 0;
     newEnemy->previous = enemiesTail;
     newEnemy->next = NULL;
 
@@ -70,17 +83,39 @@ void MoveAllEnemies(void)
 
     while (currentEnemy)
     {
-        currentEnemy->position.x += currentEnemy->speed;
+        Point target = enemyPath[currentEnemy->pathIndex];
 
-        if (currentEnemy->position.x >= DRC_SCREEN_WIDTH)
+        if (PointEquals(target, INVALID_POINT))
         {
+            // The enemy is at the end of its path
             Enemy *nextEnemy = currentEnemy->next;
             RemoveEnemy(currentEnemy);
             currentEnemy = nextEnemy;
         }
         else
         {
+            int dx = target.x - currentEnemy->position.x;
+            int dy = target.y - currentEnemy->position.y;
+
+            if (abs(dx) >= currentEnemy->speed)
+            {
+                currentEnemy->position.x += currentEnemy->speed * (dx > 0 ? 1 : -1);
+            }
+            if (abs(dy) >= currentEnemy->speed)
+            {
+                currentEnemy->position.y += currentEnemy->speed * (dy > 0 ? 1 : -1);
+            }
+            if (abs(dx) <= currentEnemy->speed && abs(dy) <= currentEnemy->speed)
+            {
+                currentEnemy->pathIndex++;
+            }
+
             currentEnemy = currentEnemy->next;
         }
     }
+}
+
+const Point *getEnemyPath(void)
+{
+    return enemyPath;
 }
