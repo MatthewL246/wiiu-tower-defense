@@ -17,30 +17,29 @@ int AddTower(Point position)
         return -1;
     }
 
-    newTower->position = position;
-    newTower->targetPosition = INVALID_POINT;
-    newTower->color = (Color){0, 255, 0};
-    newTower->size = 10;
-    newTower->fireRate = 5;
+    *newTower = (Tower){
+        .position = position,
+        .targetPosition = INVALID_POINT,
+        .color = {0, 255, 0},
+        .size = 10,
+        .fireRate = 5,
+        .bulletsFired = malloc(sizeof(Bullet)),
+        .previous = towersTail,
+        .next = NULL};
 
-    Bullet *newTowerBullet = malloc(sizeof(Bullet));
-    if (!newTowerBullet)
+    if (!newTower->bulletsFired)
     {
         WHBLogPrint("Out of memory in AddTower (newTowerBullet)!");
         free(newTower);
         return -1;
     }
 
-    newTowerBullet->position = (Point){0, 0};
-    newTowerBullet->direction = (Vector){0, 0};
-    newTowerBullet->size = 5;
-    newTowerBullet->speed = 5;
-    newTowerBullet->damage = 1;
-    newTowerBullet->health = 1;
-
-    newTower->bulletsFired = newTowerBullet;
-    newTower->previous = towersTail;
-    newTower->next = NULL;
+    *newTower->bulletsFired = (Bullet){
+        .size = 5,
+        .speed = 5,
+        .damage = 1,
+        .health = 1,
+    };
 
     if (towersHead == NULL)
     {

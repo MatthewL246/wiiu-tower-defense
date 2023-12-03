@@ -28,14 +28,15 @@ int AddEnemy(void)
         return -1;
     }
 
-    newEnemy->position = enemyPath[0];
-    newEnemy->color = (Color){255, 0, 0};
-    newEnemy->size = 20;
-    newEnemy->speed = 1;
-    newEnemy->health = 1;
-    newEnemy->pathIndex = 0;
-    newEnemy->previous = enemiesTail;
-    newEnemy->next = NULL;
+    *newEnemy = (Enemy){
+        .position = enemyPath[0],
+        .color = {255, 0, 0},
+        .size = 20,
+        .speed = 1,
+        .health = 1,
+        .pathIndex = 0,
+        .previous = enemiesTail,
+        .next = NULL};
 
     if (enemiesHead == NULL)
     {
