@@ -17,7 +17,7 @@ const Point enemyPath[] = {
     {DRC_SCREEN_WIDTH * 3 / 4, 0},
     {DRC_SCREEN_WIDTH / 2, DRC_SCREEN_HEIGHT * 1 / 3},
     {DRC_SCREEN_WIDTH, DRC_SCREEN_HEIGHT / 2},
-    INVALID_POINT};
+    CONST_INVALID_POINT};
 
 int AddEnemy(void)
 {

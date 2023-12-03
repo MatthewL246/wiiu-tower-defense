@@ -10,7 +10,8 @@ typedef struct Point
 
 bool PointEquals(Point a, Point b);
 
-#define INVALID_POINT (Point) { -1, -1 }
+#define CONST_INVALID_POINT { -1, -1 }
+#define INVALID_POINT (Point) CONST_INVALID_POINT
 
 typedef struct Vector
 {
