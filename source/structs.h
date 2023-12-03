@@ -10,6 +10,8 @@ typedef struct Point
 
 bool PointEquals(Point a, Point b);
 
+bool PointInTolerance(Point a, Point b, int tolerance);
+
 #define CONST_INVALID_POINT { -1, -1 }
 #define INVALID_POINT (Point) CONST_INVALID_POINT
 

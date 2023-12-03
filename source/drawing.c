@@ -25,32 +25,60 @@ Point MapTouchToDrcScreen(int touchX, int touchY)
 
 const int TV_WIDTH = 1280;
 const int TV_HEIGHT = 720;
+const float tvScaleX = (float)TV_WIDTH / DRC_SCREEN_WIDTH;
+const float tvScaleY = (float)TV_HEIGHT / DRC_SCREEN_HEIGHT;
 
 void DrawPoint(Point point, Color color, int size, bool drawOnBothScreens)
 {
+    int pixelColor = color.r << 24 | color.g << 16 | color.b << 8;
     int halfSize = size / 2;
+
     for (int dx = -halfSize; dx <= halfSize; dx++)
     {
         for (int dy = -halfSize; dy <= halfSize; dy++)
         {
             if (dx * dx + dy * dy <= halfSize * halfSize)
             {
-                OSScreenPutPixelEx(SCREEN_DRC, point.x + dx, point.y + dy, color.r << 24 | color.g << 16 | color.b << 8);
+                OSScreenPutPixelEx(SCREEN_DRC, point.x + dx, point.y + dy, pixelColor);
                 if (drawOnBothScreens)
                 {
-                    float tvScaleX = (float)TV_WIDTH / DRC_SCREEN_WIDTH;
-                    float tvScaleY = (float)TV_HEIGHT / DRC_SCREEN_HEIGHT;
                     int tvX = (point.x + dx) * tvScaleX;
                     int tvY = (point.y + dy) * tvScaleY;
                     for (int tvDx = -1; tvDx <= 1; tvDx++)
                     {
                         for (int tvDy = -1; tvDy <= 1; tvDy++)
                         {
-                            OSScreenPutPixelEx(SCREEN_TV, tvX + tvDx, tvY + tvDy, color.r << 24 | color.g << 16 | color.b << 8);
+                            OSScreenPutPixelEx(SCREEN_TV, tvX + tvDx, tvY + tvDy, pixelColor);
                         }
                     }
                 }
             }
+        }
+    }
+}
+
+void DrawLine(Point start, Point end, Color color, int width, bool drawOnBothScreens)
+{
+    // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+    int dx = abs(end.x - start.x);
+    int dy = abs(end.y - start.y);
+    int signX = start.x < end.x ? 1 : -1;
+    int signY = start.y < end.y ? 1 : -1;
+    int error = dx - dy;
+
+    while (!PointEquals(start, end))
+    {
+        DrawPoint(start, color, width, drawOnBothScreens);
+        int error2 = 2 * error;
+        if (error2 > -dy)
+        {
+            error -= dy;
+            start.x += signX;
+        }
+        if (error2 < dx)
+        {
+            error += dx;
+            start.y += signY;
         }
     }
 }
@@ -60,23 +88,8 @@ void DrawEnemyPath(const Point *path)
     int i = 0;
     while (!PointEquals(path[i + 1], INVALID_POINT))
     {
-        Point currentPoint = path[i];
-        Point target = path[i + 1];
         Color pathColor = (Color){50, 50, 50};
-
-        while (!PointEquals(currentPoint, target))
-        {
-            DrawPoint(currentPoint, pathColor, 5, true);
-            if (currentPoint.x != target.x)
-            {
-                currentPoint.x += target.x > currentPoint.x ? 1 : -1;
-            }
-            if (currentPoint.y != target.y)
-            {
-                currentPoint.y += target.y > currentPoint.y ? 1 : -1;
-            }
-        }
-
+        DrawLine(path[i], path[i + 1], pathColor, 2, true);
         i++;
     }
 }
