@@ -32,7 +32,7 @@ void DrawPoint(Point point, Color color, int size, bool drawOnBothScreens)
     {
         for (int dy = -halfSize; dy <= halfSize; dy++)
         {
-            if (sqrt(dx * dx + dy * dy) <= halfSize)
+            if (dx * dx + dy * dy <= halfSize * halfSize)
             {
                 OSScreenPutPixelEx(SCREEN_DRC, point.x + dx, point.y + dy, color.r << 24 | color.g << 16 | color.b << 8);
                 if (drawOnBothScreens)
