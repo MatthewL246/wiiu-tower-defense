@@ -34,7 +34,6 @@ int AddEnemy(void)
         .size = 20,
         .speed = 1,
         .health = 1,
-        .pathIndex = 0,
         .previous = enemiesTail,
         .next = NULL};
 
@@ -90,60 +89,55 @@ void MoveAllEnemies(void)
 
     while (currentEnemy)
     {
+        Point target = enemyPath[currentEnemy->pathIndex];
+        Point lastTarget = enemyPath[currentEnemy->pathIndex - (currentEnemy->pathIndex == 0 ? 0 : 1)];
+
+        if (PointEquals(target, INVALID_POINT))
+        {
+            // The enemy is at the end of its path
+            Enemy *nextEnemy = currentEnemy->next;
+            RemoveEnemy(currentEnemy);
+            currentEnemy = nextEnemy;
+            continue;
+        }
+
+        // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+        int dx = abs(target.x - lastTarget.x);
+        int dy = abs(target.y - lastTarget.y);
+        int signX = lastTarget.x < target.x ? 1 : -1;
+        int signY = lastTarget.y < target.y ? 1 : -1;
+
+        if (currentEnemy->pathError == 0)
+        {
+            // This is the first movement iteration for this path index
+            currentEnemy->pathError = dx - dy;
+        }
+
         for (int i = 0; i < currentEnemy->speed; i++)
         {
-            Point target = enemyPath[currentEnemy->pathIndex];
-            Point lastTarget = enemyPath[currentEnemy->pathIndex - (currentEnemy->pathIndex == 0 ? 0 : 1)];
-
-            if (PointEquals(target, INVALID_POINT))
+            int error2 = 2 * currentEnemy->pathError;
+            if (error2 > -dy)
             {
-                // The enemy is at the end of its path
-                Enemy *nextEnemy = currentEnemy->next;
-                RemoveEnemy(currentEnemy);
-                currentEnemy = nextEnemy;
-                break;
+                currentEnemy->pathError -= dy;
+                currentEnemy->position.x += signX;
             }
-            else
+            if (error2 < dx)
             {
-                // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
-                int dx = abs(target.x - lastTarget.x);
-                int dy = abs(target.y - lastTarget.y);
-                int signX = lastTarget.x < target.x ? 1 : -1;
-                int signY = lastTarget.y < target.y ? 1 : -1;
-
-                if (currentEnemy->pathError == 0)
-                {
-                    // This is the first iteration for this path index
-                    currentEnemy->pathError = dx - dy;
-                }
-
-                int error2 = 2 * currentEnemy->pathError;
-                if (error2 > -dy)
-                {
-                    currentEnemy->pathError -= dy;
-                    currentEnemy->position.x += signX;
-                }
-                if (error2 < dx)
-                {
-                    currentEnemy->pathError += dx;
-                    currentEnemy->position.y += signY;
-                }
-
-                if (PointInTolerance(currentEnemy->position, target, currentEnemy->speed))
-                {
-                    // The enemy has reached the path target
-                    // Snap its position to the target to prevent offsets
-                    currentEnemy->position = target;
-                    currentEnemy->pathIndex++;
-                    currentEnemy->pathError = 0;
-                }
+                currentEnemy->pathError += dx;
+                currentEnemy->position.y += signY;
             }
         }
 
-        if (currentEnemy)
+        if (PointInTolerance(currentEnemy->position, target, currentEnemy->speed))
         {
-            currentEnemy = currentEnemy->next;
+            // The enemy has reached the path target
+            // Snap its position to the target to prevent offsets
+            currentEnemy->position = target;
+            currentEnemy->pathIndex++;
+            currentEnemy->pathError = 0;
         }
+
+        currentEnemy = currentEnemy->next;
     }
 }
 
