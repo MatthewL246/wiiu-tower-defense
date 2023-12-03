@@ -10,6 +10,7 @@ typedef struct Enemy
     int speed;
     int health;
     int pathIndex;
+    int pathError;
     struct Enemy *previous;
     struct Enemy *next;
 } Enemy;

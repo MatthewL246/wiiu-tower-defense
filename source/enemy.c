@@ -90,33 +90,58 @@ void MoveAllEnemies(void)
 
     while (currentEnemy)
     {
-        Point target = enemyPath[currentEnemy->pathIndex];
-
-        if (PointEquals(target, INVALID_POINT))
+        for (int i = 0; i < currentEnemy->speed; i++)
         {
-            // The enemy is at the end of its path
-            Enemy *nextEnemy = currentEnemy->next;
-            RemoveEnemy(currentEnemy);
-            currentEnemy = nextEnemy;
+            Point target = enemyPath[currentEnemy->pathIndex];
+            Point lastTarget = enemyPath[currentEnemy->pathIndex - (currentEnemy->pathIndex == 0 ? 0 : 1)];
+
+            if (PointEquals(target, INVALID_POINT))
+            {
+                // The enemy is at the end of its path
+                Enemy *nextEnemy = currentEnemy->next;
+                RemoveEnemy(currentEnemy);
+                currentEnemy = nextEnemy;
+                break;
+            }
+            else
+            {
+                // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+                int dx = abs(target.x - lastTarget.x);
+                int dy = abs(target.y - lastTarget.y);
+                int signX = lastTarget.x < target.x ? 1 : -1;
+                int signY = lastTarget.y < target.y ? 1 : -1;
+
+                if (currentEnemy->pathError == 0)
+                {
+                    // This is the first iteration for this path index
+                    currentEnemy->pathError = dx - dy;
+                }
+
+                int error2 = 2 * currentEnemy->pathError;
+                if (error2 > -dy)
+                {
+                    currentEnemy->pathError -= dy;
+                    currentEnemy->position.x += signX;
+                }
+                if (error2 < dx)
+                {
+                    currentEnemy->pathError += dx;
+                    currentEnemy->position.y += signY;
+                }
+
+                if (PointInTolerance(currentEnemy->position, target, currentEnemy->speed))
+                {
+                    // The enemy has reached the path target
+                    // Snap its position to the target to prevent offsets
+                    currentEnemy->position = target;
+                    currentEnemy->pathIndex++;
+                    currentEnemy->pathError = 0;
+                }
+            }
         }
-        else
+
+        if (currentEnemy)
         {
-            int dx = target.x - currentEnemy->position.x;
-            int dy = target.y - currentEnemy->position.y;
-
-            if (abs(dx) >= currentEnemy->speed)
-            {
-                currentEnemy->position.x += currentEnemy->speed * (dx > 0 ? 1 : -1);
-            }
-            if (abs(dy) >= currentEnemy->speed)
-            {
-                currentEnemy->position.y += currentEnemy->speed * (dy > 0 ? 1 : -1);
-            }
-            if (abs(dx) <= currentEnemy->speed && abs(dy) <= currentEnemy->speed)
-            {
-                currentEnemy->pathIndex++;
-            }
-
             currentEnemy = currentEnemy->next;
         }
     }
