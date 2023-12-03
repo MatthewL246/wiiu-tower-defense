@@ -3,6 +3,7 @@
 #include "drawing.h"
 #include <malloc.h>
 #include <math.h>
+#include <stdlib.h>
 #include <whb/log.h>
 
 Bullet *bulletsHead = NULL;
@@ -18,7 +19,6 @@ int AddBullet(Tower *fromTower)
     }
 
     *newBullet = *fromTower->bulletsFired;
-    newBullet->position = fromTower->position;
     newBullet->previous = bulletsTail;
     newBullet->next = NULL;
 
@@ -74,19 +74,44 @@ void MoveAllBullets(void)
 
     while (currentBullet)
     {
-        currentBullet->position.x += roundf(currentBullet->direction.x * currentBullet->speed);
-        currentBullet->position.y += roundf(currentBullet->direction.y * currentBullet->speed);
-
         if (currentBullet->position.x >= DRC_SCREEN_WIDTH || currentBullet->position.y >= DRC_SCREEN_HEIGHT ||
             currentBullet->position.x < 0 || currentBullet->position.y < 0)
         {
             Bullet *nextBullet = currentBullet->next;
             RemoveBullet(currentBullet);
             currentBullet = nextBullet;
+            continue;
         }
-        else
+
+        Point target = currentBullet->targetPosition;
+        Point initial = currentBullet->initialPosition;
+
+        // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+        int dx = abs(target.x - initial.x);
+        int dy = abs(target.y - initial.y);
+        int signX = initial.x < target.x ? 1 : -1;
+        int signY = initial.y < target.y ? 1 : -1;
+
+        if (currentBullet->pathError == 0)
         {
-            currentBullet = currentBullet->next;
+            currentBullet->pathError = dx - dy;
         }
+
+        for (int i = 0; i < currentBullet->speed; i++)
+        {
+            int error2 = 2 * currentBullet->pathError;
+            if (error2 > -dy)
+            {
+                currentBullet->pathError -= dy;
+                currentBullet->position.x += signX;
+            }
+            if (error2 < dx)
+            {
+                currentBullet->pathError += dx;
+                currentBullet->position.y += signY;
+            }
+        }
+
+        currentBullet = currentBullet->next;
     }
 }

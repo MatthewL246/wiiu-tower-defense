@@ -6,7 +6,9 @@
 typedef struct Bullet
 {
     Point position;
-    Vector direction;
+    Point initialPosition;
+    Point targetPosition;
+    int pathError;
     int size;
     int speed;
     int damage;

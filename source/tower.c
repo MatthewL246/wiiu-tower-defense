@@ -35,6 +35,8 @@ int AddTower(Point position)
     }
 
     *newTower->bulletsFired = (Bullet){
+        .position = newTower->position,
+        .initialPosition = newTower->position,
         .size = 5,
         .speed = 5,
         .damage = 1,
@@ -57,18 +59,7 @@ int AddTower(Point position)
 void SetTowerTarget(Tower *tower, Point targetPosition)
 {
     tower->targetPosition = targetPosition;
-
-    // Calculate the direction vector from the tower to the target
-    Vector direction;
-    direction.x = tower->targetPosition.x - tower->position.x;
-    direction.y = tower->targetPosition.y - tower->position.y;
-
-    // Normalize the direction vector to get a unit vector
-    float length = sqrt(direction.x * direction.x + direction.y * direction.y);
-    direction.x = direction.x / length;
-    direction.y = direction.y / length;
-
-    tower->bulletsFired->direction = direction;
+    tower->bulletsFired->targetPosition = targetPosition;
 }
 
 void SetLastTowerTarget(Point targetPosition)
