@@ -1,6 +1,7 @@
 #include "bullet.h"
 
 #include "drawing.h"
+#include "macros.h"
 #include <malloc.h>
 #include <math.h>
 #include <stdlib.h>

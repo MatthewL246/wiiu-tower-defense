@@ -1,6 +1,7 @@
 #include "enemy.h"
 
 #include "drawing.h"
+#include "macros.h"
 #include <malloc.h>
 #include <stdlib.h>
 #include <whb/log.h>

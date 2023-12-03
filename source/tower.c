@@ -1,6 +1,7 @@
 #include "tower.h"
 
 #include "bullet.h"
+#include "macros.h"
 #include <malloc.h>
 #include <math.h>
 #include <whb/log.h>

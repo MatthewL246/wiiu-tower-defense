@@ -1,6 +1,7 @@
 #include "drawing.h"
 
 #include "bullet.h"
+#include "macros.h"
 #include "enemy.h"
 #include "tower.h"
 #include <coreinit/screen.h>
