@@ -89,13 +89,10 @@ void RemoveEnemy(Enemy **enemyPointer)
 
 void MoveAllEnemies(int gameLoopCounter)
 {
-    Enemy *currentEnemy = enemiesHead;
-
-    while (currentEnemy)
+    for (Enemy *currentEnemy = enemiesHead; currentEnemy; currentEnemy = currentEnemy->next)
     {
         if (gameLoopCounter % MAX((SPEED_CONSTANT / currentEnemy->speed), 1) != 0)
         {
-            currentEnemy = currentEnemy->next;
             continue;
         }
 
@@ -105,7 +102,20 @@ void MoveAllEnemies(int gameLoopCounter)
         if (PointEquals(target, INVALID_POINT))
         {
             // The enemy is at the end of its path
+            Enemy *previous = currentEnemy->previous;
             RemoveEnemy(&currentEnemy);
+
+            // The loop will continue with the next enemy of the previous enemy
+            // (which is same as the next enemy of the one that was just
+            // removed) or the head of the list if the first enemy was removed
+            currentEnemy = previous ? previous : enemiesHead;
+
+            if (!currentEnemy)
+            {
+                // There are no more enemies if enemiesHead is null
+                return;
+            }
+
             continue;
         }
 
@@ -144,8 +154,6 @@ void MoveAllEnemies(int gameLoopCounter)
             currentEnemy->pathIndex++;
             currentEnemy->pathError = 0;
         }
-
-        currentEnemy = currentEnemy->next;
     }
 }
 

@@ -74,20 +74,26 @@ void RemoveBullet(Bullet **bulletPointer)
 
 void MoveAllBullets(int gameLoopCounter)
 {
-    Bullet *currentBullet = bulletsHead;
-
-    while (currentBullet)
+    for (Bullet *currentBullet = bulletsHead; currentBullet; currentBullet = currentBullet->next)
     {
         if (gameLoopCounter % MAX((SPEED_CONSTANT / currentBullet->speed), 1) != 0)
         {
-            currentBullet = currentBullet->next;
             continue;
         }
 
         if (currentBullet->position.x >= DRC_SCREEN_WIDTH || currentBullet->position.y >= DRC_SCREEN_HEIGHT ||
             currentBullet->position.x < 0 || currentBullet->position.y < 0)
         {
+            Bullet *previous = currentBullet->previous;
             RemoveBullet(&currentBullet);
+
+            currentBullet = previous ? previous : bulletsHead;
+
+            if (!currentBullet)
+            {
+                return;
+            }
+
             continue;
         }
 
@@ -119,7 +125,5 @@ void MoveAllBullets(int gameLoopCounter)
                 currentBullet->position.y += signY;
             }
         }
-
-        currentBullet = currentBullet->next;
     }
 }

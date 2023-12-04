@@ -1,8 +1,8 @@
 #include "drawing.h"
 
 #include "bullet.h"
-#include "macros.h"
 #include "enemy.h"
+#include "macros.h"
 #include "tower.h"
 #include <coreinit/screen.h>
 #include <math.h>
@@ -97,37 +97,28 @@ void DrawEnemyPath(const Point *path)
 
 void DrawAllTowers(void)
 {
-    Tower *currentTower = towersHead;
-
-    while (currentTower)
+    for (Tower *currentTower = towersHead; currentTower; currentTower = currentTower->next)
     {
         DrawPoint(currentTower->position, currentTower->color, currentTower->size, true);
         if (!PointEquals(currentTower->targetPosition, INVALID_POINT))
         {
             DrawPoint(currentTower->targetPosition, (Color){255, 155, 0}, 10, true);
         }
-        currentTower = currentTower->next;
     }
 }
 
 void DrawAllBullets(void)
 {
-    Bullet *currentBullet = bulletsHead;
-
-    while (currentBullet)
+    for (Bullet *currentBullet = bulletsHead; currentBullet; currentBullet = currentBullet->next)
     {
         DrawPoint(currentBullet->position, (Color){150, 150, 150}, currentBullet->size, true);
-        currentBullet = currentBullet->next;
     }
 }
 
 void DrawAllEnemies(void)
 {
-    Enemy *currentEnemy = enemiesHead;
-
-    while (currentEnemy)
+    for (Enemy *currentEnemy = enemiesHead; currentEnemy; currentEnemy = currentEnemy->next)
     {
         DrawPoint(currentEnemy->position, currentEnemy->color, currentEnemy->size, true);
-        currentEnemy = currentEnemy->next;
     }
 }

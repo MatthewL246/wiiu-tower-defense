@@ -17,37 +17,42 @@
 
 void CheckBulletEnemyCollisions(void)
 {
-    Bullet *currentBullet = bulletsHead;
-
-    while (currentBullet)
+    for (Bullet *currentBullet = bulletsHead; currentBullet; currentBullet = currentBullet->next)
     {
-        Enemy *currentEnemy = enemiesHead;
-
-        while (currentEnemy)
+        for (Enemy *currentEnemy = enemiesHead; currentEnemy; currentEnemy = currentEnemy->next)
         {
-            float dx = currentBullet->position.x - currentEnemy->position.x;
-            float dy = currentBullet->position.y - currentEnemy->position.y;
-            float distance = sqrt(dx * dx + dy * dy);
+            int hitSize = (currentEnemy->size + currentBullet->size) / 2;
 
-            if (distance <= currentBullet->size + currentEnemy->size)
+            if (PointInTolerance(currentBullet->position, currentEnemy->position, hitSize))
             {
                 currentBullet->health -= 1;
                 currentEnemy->health -= currentBullet->damage;
 
                 if (currentBullet->health <= 0)
                 {
+                    Bullet *previous = currentBullet->previous;
                     RemoveBullet(&currentBullet);
+
+                    currentBullet = previous ? previous : bulletsHead;
+
+                    if (!currentBullet)
+                    {
+                        return;
+                    }
                 }
                 if (currentEnemy->health <= 0)
                 {
+                    Enemy *previous = currentEnemy->previous;
                     RemoveEnemy(&currentEnemy);
+                    currentEnemy = previous ? previous : enemiesHead;
+
+                    if (!currentEnemy)
+                    {
+                        return;
+                    }
                 }
             }
-
-            currentEnemy = currentEnemy->next;
         }
-
-        currentBullet = currentBullet->next;
     }
 }
 

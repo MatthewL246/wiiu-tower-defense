@@ -107,9 +107,7 @@ void RemoveTower(Tower **towerPointer)
 
 int FireAllTowers(unsigned gameLoopCounter)
 {
-    Tower *currentTower = towersHead;
-
-    while (currentTower)
+    for (Tower *currentTower = towersHead; currentTower; currentTower = currentTower->next)
     {
         if (!PointEquals(currentTower->targetPosition, INVALID_POINT) && gameLoopCounter % (SPEED_CONSTANT / currentTower->fireRate) == 0)
         {
@@ -120,8 +118,6 @@ int FireAllTowers(unsigned gameLoopCounter)
                 return result;
             }
         }
-
-        currentTower = currentTower->next;
     }
 
     return 0;
