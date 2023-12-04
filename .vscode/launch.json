@@ -43,7 +43,7 @@
             "type": "node-terminal",
             "request": "launch",
             "preLaunchTask": "Build project",
-            "command": "${config:cemu_path} -g build/$(basename ${workspaceFolder}).rpx --enable-gdbstub && exit"
+            "command": "${config:cemu_path} -g build/$(basename ${workspaceFolder}).rpx --force-interpreter --enable-gdbstub && exit"
         },
         {
             // This is a dummy configuration that just runs the gdbstub task and
