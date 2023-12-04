@@ -19,7 +19,7 @@ extern Enemy *enemiesHead;
 
 int AddEnemy(void);
 
-void RemoveEnemy(Enemy *enemy);
+void RemoveEnemy(Enemy **enemyPointer);
 
 void MoveAllEnemies(int gameLoopCounter);
 

@@ -21,6 +21,6 @@ extern Bullet *bulletsHead;
 
 int AddBullet(Tower *fromTower);
 
-void RemoveBullet(Bullet *bullet);
+void RemoveBullet(Bullet **bulletPointer);
 
 void MoveAllBullets(int gameLoopCounter);

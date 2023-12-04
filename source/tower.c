@@ -68,13 +68,15 @@ void SetLastTowerTarget(Point targetPosition)
     SetTowerTarget(towersTail, targetPosition);
 }
 
-void RemoveTower(Tower *tower)
+void RemoveTower(Tower **towerPointer)
 {
-    if (!tower)
+    if (!towerPointer || !*towerPointer)
     {
         WHBLogPrint("Attempted to remove NULL tower!");
         return;
     }
+
+    Tower *tower = *towerPointer;
 
     // Set the previous tower's next
     if (tower->previous)
@@ -100,6 +102,7 @@ void RemoveTower(Tower *tower)
 
     free(tower->bulletsFired);
     free(tower);
+    *towerPointer = NULL;
 }
 
 int FireAllTowers(unsigned gameLoopCounter)

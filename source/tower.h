@@ -20,7 +20,7 @@ extern Tower *towersHead;
 
 int AddTower(Point position);
 
-void RemoveTower(Tower *tower);
+void RemoveTower(Tower **towerPointer);
 
 void SetLastTowerTarget(Point targetPosition);
 

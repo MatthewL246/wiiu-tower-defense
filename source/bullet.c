@@ -36,13 +36,15 @@ int AddBullet(Tower *fromTower)
     return 0;
 }
 
-void RemoveBullet(Bullet *bullet)
+void RemoveBullet(Bullet **bulletPointer)
 {
-    if (!bullet)
+    if (!bulletPointer || !*bulletPointer)
     {
         WHBLogPrint("Attempted to remove NULL bullet!");
         return;
     }
+
+    Bullet *bullet = *bulletPointer;
 
     // Set the previous bullet's next
     if (bullet->previous)
@@ -67,6 +69,7 @@ void RemoveBullet(Bullet *bullet)
     }
 
     free(bullet);
+    *bulletPointer = NULL;
 }
 
 void MoveAllBullets(int gameLoopCounter)
@@ -84,9 +87,7 @@ void MoveAllBullets(int gameLoopCounter)
         if (currentBullet->position.x >= DRC_SCREEN_WIDTH || currentBullet->position.y >= DRC_SCREEN_HEIGHT ||
             currentBullet->position.x < 0 || currentBullet->position.y < 0)
         {
-            Bullet *nextBullet = currentBullet->next;
-            RemoveBullet(currentBullet);
-            currentBullet = nextBullet;
+            RemoveBullet(&currentBullet);
             continue;
         }
 

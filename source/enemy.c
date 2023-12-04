@@ -51,13 +51,15 @@ int AddEnemy(void)
     return 0;
 }
 
-void RemoveEnemy(Enemy *enemy)
+void RemoveEnemy(Enemy **enemyPointer)
 {
-    if (!enemy)
+    if (!enemyPointer || !*enemyPointer)
     {
         WHBLogPrint("Attempted to remove NULL enemy!");
         return;
     }
+
+    Enemy *enemy = *enemyPointer;
 
     // Set the previous enemy's next
     if (enemy->previous)
@@ -82,6 +84,7 @@ void RemoveEnemy(Enemy *enemy)
     }
 
     free(enemy);
+    *enemyPointer = NULL;
 }
 
 void MoveAllEnemies(int gameLoopCounter)
@@ -102,9 +105,7 @@ void MoveAllEnemies(int gameLoopCounter)
         if (PointEquals(target, INVALID_POINT))
         {
             // The enemy is at the end of its path
-            Enemy *nextEnemy = currentEnemy->next;
-            RemoveEnemy(currentEnemy);
-            currentEnemy = nextEnemy;
+            RemoveEnemy(&currentEnemy);
             continue;
         }
 

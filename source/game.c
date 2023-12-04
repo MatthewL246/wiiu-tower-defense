@@ -36,11 +36,11 @@ void CheckBulletEnemyCollisions(void)
 
                 if (currentBullet->health <= 0)
                 {
-                    RemoveBullet(currentBullet);
+                    RemoveBullet(&currentBullet);
                 }
                 if (currentEnemy->health <= 0)
                 {
-                    RemoveEnemy(currentEnemy);
+                    RemoveEnemy(&currentEnemy);
                 }
             }
 
@@ -120,15 +120,18 @@ void GameShutdown(void)
     // Free all towers, bullets, and enemies
     while (towersHead)
     {
-        RemoveTower(towersHead);
+        Tower *toRemove = towersHead;
+        RemoveTower(&toRemove);
     }
     while (bulletsHead)
     {
-        RemoveBullet(bulletsHead);
+        Bullet *toRemove = bulletsHead;
+        RemoveBullet(&toRemove);
     }
     while (enemiesHead)
     {
-        RemoveEnemy(enemiesHead);
+        Enemy *toRemove = enemiesHead;
+        RemoveEnemy(&toRemove);
     }
 }
 
