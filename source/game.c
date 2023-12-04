@@ -145,7 +145,7 @@ void ProfilerLogTime(char *title, OSTick time)
 {
     unsigned frametimeMicroseconds = OSTicksToMicroseconds(time);
     char profilerLogString[100];
-    snprintf(profilerLogString, sizeof(profilerLogString), "%s: %.2f ms", title, frametimeMicroseconds / 1000.0);
+    snprintf(profilerLogString, sizeof(profilerLogString) / sizeof(char), "%s: %.2f ms", title, frametimeMicroseconds / 1000.0);
     OSScreenPutFontEx(SCREEN_DRC, 0, profilerMessageCounter, profilerLogString);
     OSScreenPutFontEx(SCREEN_TV, 0, profilerMessageCounter, profilerLogString);
     profilerMessageCounter++;
