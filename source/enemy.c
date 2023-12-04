@@ -33,7 +33,7 @@ int AddEnemy(void)
         .position = enemyPath[0],
         .color = {255, 0, 0},
         .size = 20,
-        .speed = 1,
+        .speed = 1 * SPEED_CONSTANT,
         .health = 1,
         .previous = enemiesTail,
         .next = NULL};
@@ -84,12 +84,18 @@ void RemoveEnemy(Enemy *enemy)
     free(enemy);
 }
 
-void MoveAllEnemies(void)
+void MoveAllEnemies(int gameLoopCounter)
 {
     Enemy *currentEnemy = enemiesHead;
 
     while (currentEnemy)
     {
+        if (gameLoopCounter % MAX((SPEED_CONSTANT / currentEnemy->speed), 1) != 0)
+        {
+            currentEnemy = currentEnemy->next;
+            continue;
+        }
+
         Point target = enemyPath[currentEnemy->pathIndex];
         Point lastTarget = enemyPath[currentEnemy->pathIndex - (currentEnemy->pathIndex == 0 ? 0 : 1)];
 
@@ -114,7 +120,7 @@ void MoveAllEnemies(void)
             currentEnemy->pathError = dx - dy;
         }
 
-        for (int i = 0; i < currentEnemy->speed; i++)
+        for (int i = 0; i < MAX(currentEnemy->speed / SPEED_CONSTANT, 1); i++)
         {
             int error2 = 2 * currentEnemy->pathError;
             if (error2 > -dy)
@@ -129,7 +135,7 @@ void MoveAllEnemies(void)
             }
         }
 
-        if (PointInTolerance(currentEnemy->position, target, currentEnemy->speed))
+        if (PointInTolerance(currentEnemy->position, target, MAX(currentEnemy->speed / SPEED_CONSTANT, 1)))
         {
             // The enemy has reached the path target
             // Snap its position to the target to prevent offsets

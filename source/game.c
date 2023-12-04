@@ -102,8 +102,8 @@ int GameLoop(VPADStatus status, OSTick deltaTime)
         return result;
     }
 
-    MoveAllEnemies();
-    MoveAllBullets();
+    MoveAllEnemies(gameLoopCounter);
+    MoveAllBullets(gameLoopCounter);
     CheckBulletEnemyCollisions();
 
     DrawEnemyPath(getEnemyPath());

@@ -23,7 +23,7 @@ int AddTower(Point position)
         .targetPosition = INVALID_POINT,
         .color = {0, 255, 0},
         .size = 10,
-        .fireRate = 5,
+        .fireRate = 0.05 * SPEED_CONSTANT,
         .bulletsFired = malloc(sizeof(Bullet)),
         .previous = towersTail,
         .next = NULL};
@@ -39,7 +39,7 @@ int AddTower(Point position)
         .position = newTower->position,
         .initialPosition = newTower->position,
         .size = 5,
-        .speed = 5,
+        .speed = 5 * SPEED_CONSTANT,
         .damage = 1,
         .health = 1,
     };
@@ -108,16 +108,13 @@ int FireAllTowers(unsigned gameLoopCounter)
 
     while (currentTower)
     {
-        if (!PointEquals(currentTower->targetPosition, INVALID_POINT))
+        if (!PointEquals(currentTower->targetPosition, INVALID_POINT) && gameLoopCounter % (SPEED_CONSTANT / currentTower->fireRate) == 0)
         {
-            if (gameLoopCounter % (100 / currentTower->fireRate) == 0)
+            int result = AddBullet(currentTower);
+            if (result != 0)
             {
-                int result = AddBullet(currentTower);
-                if (result != 0)
-                {
-                    WHBLogPrintf("AddBullet failed with error code %d.", result);
-                    return result;
-                }
+                WHBLogPrintf("AddBullet failed with error code %d.", result);
+                return result;
             }
         }
 

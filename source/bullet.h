@@ -23,4 +23,4 @@ int AddBullet(Tower *fromTower);
 
 void RemoveBullet(Bullet *bullet);
 
-void MoveAllBullets(void);
+void MoveAllBullets(int gameLoopCounter);

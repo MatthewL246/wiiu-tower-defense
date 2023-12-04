@@ -21,6 +21,6 @@ int AddEnemy(void);
 
 void RemoveEnemy(Enemy *enemy);
 
-void MoveAllEnemies(void);
+void MoveAllEnemies(int gameLoopCounter);
 
 const Point *getEnemyPath(void);
