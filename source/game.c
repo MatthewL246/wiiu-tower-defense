@@ -27,6 +27,7 @@ void CheckBulletEnemyCollisions(void)
             {
                 currentBullet->health -= 1;
                 currentEnemy->health -= currentBullet->damage;
+                bool shouldReturn = false;
 
                 if (currentBullet->health <= 0)
                 {
@@ -37,7 +38,8 @@ void CheckBulletEnemyCollisions(void)
 
                     if (!currentBullet)
                     {
-                        return;
+                        // There are no more bullets to iterate
+                        shouldReturn = true;
                     }
                 }
                 if (currentEnemy->health <= 0)
@@ -48,8 +50,14 @@ void CheckBulletEnemyCollisions(void)
 
                     if (!currentEnemy)
                     {
-                        return;
+                        // There are no more enemies to iterate
+                        shouldReturn = true;
                     }
+                }
+
+                if (shouldReturn)
+                {
+                    return;
                 }
             }
         }
