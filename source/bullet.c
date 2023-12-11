@@ -2,6 +2,7 @@
 
 #include "drawing.h"
 #include "macros.h"
+#include "tower.h"
 #include <malloc.h>
 #include <math.h>
 #include <stdlib.h>
@@ -30,6 +31,7 @@ int AddBullet(Tower *fromTower)
 
     if (bulletsHead == NULL)
     {
+        // The list of bullets is empty and this is the first bullet
         bulletsHead = newBullet;
     }
     else
@@ -81,6 +83,8 @@ void MoveAllBullets(unsigned int gameLoopCounter)
 {
     for (Bullet *currentBullet = bulletsHead; currentBullet; currentBullet = currentBullet->next)
     {
+        // Don't move the bullet if its speed is less than one pixel per game
+        // loop and this is not the correct loop
         if (gameLoopCounter % MAX((SPEED_CONSTANT / currentBullet->speed), 1) != 0)
         {
             continue;
@@ -89,6 +93,7 @@ void MoveAllBullets(unsigned int gameLoopCounter)
         if (currentBullet->position.x >= DRC_SCREEN_WIDTH || currentBullet->position.y >= DRC_SCREEN_HEIGHT ||
             currentBullet->position.x < 0 || currentBullet->position.y < 0)
         {
+            // Remove the bullet because it is off the screen
             Bullet *previous = currentBullet->previous;
             RemoveBullet(&currentBullet);
 
@@ -113,9 +118,12 @@ void MoveAllBullets(unsigned int gameLoopCounter)
 
         if (currentBullet->pathError == 0)
         {
+            // This is the first time that this bullet has moved
             currentBullet->pathError = dx - dy;
         }
 
+        // Move the bullet multiple times if its speed is greater than one pixel
+        // per game loop
         for (unsigned int i = 0; i < MAX(currentBullet->speed / SPEED_CONSTANT, 1); i++)
         {
             int error2 = 2 * currentBullet->pathError;

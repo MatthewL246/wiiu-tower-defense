@@ -23,7 +23,8 @@ const Point enemyPath[] = {
     {DRC_SCREEN_WIDTH * 3 / 4, 0},
     {DRC_SCREEN_WIDTH / 2, DRC_SCREEN_HEIGHT * 1 / 3},
     {DRC_SCREEN_WIDTH, DRC_SCREEN_HEIGHT / 2},
-    CONST_INVALID_POINT};
+    CONST_INVALID_POINT,
+};
 
 int AddEnemy(void)
 {
@@ -41,10 +42,12 @@ int AddEnemy(void)
         .speed = 1 * SPEED_CONSTANT,
         .health = 1,
         .previous = enemiesTail,
-        .next = NULL};
+        .next = NULL,
+    };
 
     if (enemiesHead == NULL)
     {
+        // The list of enemies is empty and this is the first enemy
         enemiesHead = newEnemy;
     }
     else
@@ -96,6 +99,8 @@ void MoveAllEnemies(unsigned int gameLoopCounter)
 {
     for (Enemy *currentEnemy = enemiesHead; currentEnemy; currentEnemy = currentEnemy->next)
     {
+        // Don't move the enemy if its speed is less than one pixel per game
+        // loop and this is not the correct loop
         if (gameLoopCounter % MAX((SPEED_CONSTANT / currentEnemy->speed), 1) != 0)
         {
             continue;
@@ -106,7 +111,7 @@ void MoveAllEnemies(unsigned int gameLoopCounter)
 
         if (PointsEqual(target, INVALID_POINT))
         {
-            // The enemy is at the end of its path
+            // Remove the enemy because it is at the end of its path
             Enemy *previous = currentEnemy->previous;
             RemoveEnemy(&currentEnemy);
 
@@ -132,10 +137,12 @@ void MoveAllEnemies(unsigned int gameLoopCounter)
 
         if (currentEnemy->pathError == 0)
         {
-            // This is the first movement iteration for this path index
+            // This is the first time that the enemy has moved for this path index
             currentEnemy->pathError = dx - dy;
         }
 
+        // Move the enemy multiple times if its speed is greater than one pixel
+        // per game loop
         for (unsigned int i = 0; i < MAX(currentEnemy->speed / SPEED_CONSTANT, 1); i++)
         {
             int error2 = 2 * currentEnemy->pathError;
@@ -153,7 +160,7 @@ void MoveAllEnemies(unsigned int gameLoopCounter)
 
         if (PointsWithinTolerance(currentEnemy->position, target, MAX(currentEnemy->speed / SPEED_CONSTANT, 1)))
         {
-            // The enemy has reached the path target
+            // The enemy has reached the path target, so increment its path index
             // Snap its position to the target to prevent offsets
             currentEnemy->position = target;
             currentEnemy->pathIndex++;

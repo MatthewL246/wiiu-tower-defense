@@ -10,7 +10,7 @@ bool PointsEqual(Point a, Point b)
 
 bool PointsWithinTolerance(Point a, Point b, int tolerance)
 {
-    // This uses a square collision for the points because sqrt is slow
+    // Uses a square collision box for the points because sqrt is slow
     return abs(a.x - b.x) <= tolerance && abs(a.y - b.y) <= tolerance;
 }
 

@@ -29,7 +29,7 @@ void CheckBulletEnemyCollisions(void)
                 currentEnemy->health -= currentBullet->damage;
                 bool shouldReturn = false;
 
-                if (currentBullet->health <= 0)
+                if (currentBullet->health == 0)
                 {
                     Bullet *previous = currentBullet->previous;
                     RemoveBullet(&currentBullet);
@@ -42,7 +42,7 @@ void CheckBulletEnemyCollisions(void)
                         shouldReturn = true;
                     }
                 }
-                if (currentEnemy->health <= 0)
+                if (currentEnemy->health == 0)
                 {
                     Enemy *previous = currentEnemy->previous;
                     RemoveEnemy(&currentEnemy);
@@ -64,8 +64,8 @@ void CheckBulletEnemyCollisions(void)
     }
 }
 
-unsigned gameLoopCounter = 0;
-unsigned touchTimer = 0;
+unsigned int gameLoopCounter = 0;
+unsigned int touchTimer = 0;
 const int touchDelay = 1;
 bool targetMode = false;
 

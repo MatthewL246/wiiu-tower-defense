@@ -31,13 +31,14 @@ int AddTower(Point position)
         .fireRate = 0.05 * SPEED_CONSTANT,
         .bulletsFired = malloc(sizeof(Bullet)),
         .previous = towersTail,
-        .next = NULL};
+        .next = NULL,
+    };
 
     if (!newTower->bulletsFired)
     {
         WHBLogPrint("Out of memory in AddTower (newTowerBullet)!");
         free(newTower);
-        return -1;
+        return -2;
     }
 
     *newTower->bulletsFired = (Bullet){
@@ -51,6 +52,7 @@ int AddTower(Point position)
 
     if (towersHead == NULL)
     {
+        // The list of towers is empty and this is the first tower
         towersHead = newTower;
     }
     else
@@ -114,6 +116,8 @@ int FireAllTowers(unsigned int gameLoopCounter)
 {
     for (Tower *currentTower = towersHead; currentTower; currentTower = currentTower->next)
     {
+        // Only fire if the tower has a valid target and it is time to fire
+        // based on the fire rate and the current game loop counter
         if (!PointsEqual(currentTower->targetPosition, INVALID_POINT) && gameLoopCounter % (SPEED_CONSTANT / currentTower->fireRate) == 0)
         {
             int result = AddBullet(currentTower);

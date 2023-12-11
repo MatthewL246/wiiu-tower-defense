@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// These were determined through experimenting with touching different points on
+// the screen and might be different for different consoles.
 const int DRC_TOUCH_TOP = 3900;
 const int DRC_TOUCH_BOTTOM = 180;
 const int DRC_TOUCH_LEFT = 100;
@@ -24,6 +26,8 @@ Point MapTouchToDrcScreen(Point touchPoint)
     return screenPoint;
 }
 
+// The TV screen seems to be 1280x720 when using OSScreen regardless of the
+// resolution set in the system settings.
 const int TV_WIDTH = 1280;
 const int TV_HEIGHT = 720;
 const float tvScaleX = (float)TV_WIDTH / DRC_SCREEN_WIDTH;
@@ -38,20 +42,19 @@ void DrawPoint(Point point, Color color, unsigned int size, bool drawOnBothScree
     {
         for (int dy = -halfSize; dy <= halfSize; dy++)
         {
+            // Only draw pixels inside a circle
             if (dx * dx + dy * dy <= halfSize * halfSize)
             {
                 OSScreenPutPixelEx(SCREEN_DRC, point.x + dx, point.y + dy, pixelColor);
                 if (drawOnBothScreens)
                 {
+                    // Scale the pixel to the TV screen and double its size
                     int tvX = (point.x + dx) * tvScaleX;
                     int tvY = (point.y + dy) * tvScaleY;
-                    for (int tvDx = -1; tvDx <= 1; tvDx++)
-                    {
-                        for (int tvDy = -1; tvDy <= 1; tvDy++)
-                        {
-                            OSScreenPutPixelEx(SCREEN_TV, tvX + tvDx, tvY + tvDy, pixelColor);
-                        }
-                    }
+                    OSScreenPutPixelEx(SCREEN_TV, tvX, tvY, pixelColor);
+                    OSScreenPutPixelEx(SCREEN_TV, tvX, tvY + 1, pixelColor);
+                    OSScreenPutPixelEx(SCREEN_TV, tvX + 1, tvY, pixelColor);
+                    OSScreenPutPixelEx(SCREEN_TV, tvX + 1, tvY + 1, pixelColor);
                 }
             }
         }
@@ -97,21 +100,23 @@ void DrawEnemyPath(const Point *path)
 
 void DrawAllTowers(void)
 {
+    Color towerTargetColor = (Color){155, 155, 0};
     for (Tower *currentTower = GetTowersHead(); currentTower; currentTower = currentTower->next)
     {
         DrawPoint(currentTower->position, currentTower->color, currentTower->size, true);
         if (!PointsEqual(currentTower->targetPosition, INVALID_POINT))
         {
-            DrawPoint(currentTower->targetPosition, (Color){255, 155, 0}, 10, true);
+            DrawPoint(currentTower->targetPosition, towerTargetColor, 10, true);
         }
     }
 }
 
 void DrawAllBullets(void)
 {
+    Color bulletColor = (Color){150, 150, 150};
     for (Bullet *currentBullet = GetBulletsHead(); currentBullet; currentBullet = currentBullet->next)
     {
-        DrawPoint(currentBullet->position, (Color){150, 150, 150}, currentBullet->size, true);
+        DrawPoint(currentBullet->position, bulletColor, currentBullet->size, true);
     }
 }
 
