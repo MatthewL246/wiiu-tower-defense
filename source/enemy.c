@@ -9,6 +9,11 @@
 Enemy *enemiesHead = NULL;
 Enemy *enemiesTail = NULL;
 
+Enemy *GetEnemiesHead(void)
+{
+    return enemiesHead;
+}
+
 const Point enemyPath[] = {
     {0, DRC_SCREEN_HEIGHT / 2},
     {DRC_SCREEN_WIDTH / 4, DRC_SCREEN_HEIGHT},

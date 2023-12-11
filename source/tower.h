@@ -16,7 +16,7 @@ typedef struct Tower
     struct Tower *next;
 } Tower;
 
-extern Tower *towersHead;
+Tower *GetTowersHead(void);
 
 int AddTower(Point position);
 

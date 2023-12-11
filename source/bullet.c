@@ -10,6 +10,11 @@
 Bullet *bulletsHead = NULL;
 Bullet *bulletsTail = NULL;
 
+Bullet *GetBulletsHead(void)
+{
+    return bulletsHead;
+}
+
 int AddBullet(Tower *fromTower)
 {
     Bullet *newBullet = malloc(sizeof(Bullet));

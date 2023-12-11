@@ -97,7 +97,7 @@ void DrawEnemyPath(const Point *path)
 
 void DrawAllTowers(void)
 {
-    for (Tower *currentTower = towersHead; currentTower; currentTower = currentTower->next)
+    for (Tower *currentTower = GetTowersHead(); currentTower; currentTower = currentTower->next)
     {
         DrawPoint(currentTower->position, currentTower->color, currentTower->size, true);
         if (!PointsEqual(currentTower->targetPosition, INVALID_POINT))
@@ -109,7 +109,7 @@ void DrawAllTowers(void)
 
 void DrawAllBullets(void)
 {
-    for (Bullet *currentBullet = bulletsHead; currentBullet; currentBullet = currentBullet->next)
+    for (Bullet *currentBullet = GetBulletsHead(); currentBullet; currentBullet = currentBullet->next)
     {
         DrawPoint(currentBullet->position, (Color){150, 150, 150}, currentBullet->size, true);
     }
@@ -117,7 +117,7 @@ void DrawAllBullets(void)
 
 void DrawAllEnemies(void)
 {
-    for (Enemy *currentEnemy = enemiesHead; currentEnemy; currentEnemy = currentEnemy->next)
+    for (Enemy *currentEnemy = GetEnemiesHead(); currentEnemy; currentEnemy = currentEnemy->next)
     {
         DrawPoint(currentEnemy->position, currentEnemy->color, currentEnemy->size, true);
     }

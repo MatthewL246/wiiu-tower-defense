@@ -9,6 +9,11 @@
 Tower *towersHead = NULL;
 Tower *towersTail = NULL;
 
+Tower *GetTowersHead(void)
+{
+    return towersHead;
+}
+
 int AddTower(Point position)
 {
     Tower *newTower = malloc(sizeof(Tower));

@@ -15,7 +15,7 @@ typedef struct Enemy
     struct Enemy *next;
 } Enemy;
 
-extern Enemy *enemiesHead;
+Enemy *GetEnemiesHead(void);
 
 int AddEnemy(void);
 

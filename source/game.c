@@ -17,9 +17,9 @@
 
 void CheckBulletEnemyCollisions(void)
 {
-    for (Bullet *currentBullet = bulletsHead; currentBullet; currentBullet = currentBullet->next)
+    for (Bullet *currentBullet = GetBulletsHead(); currentBullet; currentBullet = currentBullet->next)
     {
-        for (Enemy *currentEnemy = enemiesHead; currentEnemy; currentEnemy = currentEnemy->next)
+        for (Enemy *currentEnemy = GetEnemiesHead(); currentEnemy; currentEnemy = currentEnemy->next)
         {
             int hitSize = (currentEnemy->size + currentBullet->size) / 2;
 
@@ -34,7 +34,7 @@ void CheckBulletEnemyCollisions(void)
                     Bullet *previous = currentBullet->previous;
                     RemoveBullet(&currentBullet);
 
-                    currentBullet = previous ? previous : bulletsHead;
+                    currentBullet = previous ? previous : GetBulletsHead();
 
                     if (!currentBullet)
                     {
@@ -46,7 +46,7 @@ void CheckBulletEnemyCollisions(void)
                 {
                     Enemy *previous = currentEnemy->previous;
                     RemoveEnemy(&currentEnemy);
-                    currentEnemy = previous ? previous : enemiesHead;
+                    currentEnemy = previous ? previous : GetEnemiesHead();
 
                     if (!currentEnemy)
                     {
@@ -131,19 +131,19 @@ int GameLoop(VPADStatus status, OSTick deltaTime)
 void GameShutdown(void)
 {
     // Free all towers, bullets, and enemies
-    while (towersHead)
+    while (GetTowersHead())
     {
-        Tower *toRemove = towersHead;
+        Tower *toRemove = GetTowersHead();
         RemoveTower(&toRemove);
     }
-    while (bulletsHead)
+    while (GetBulletsHead())
     {
-        Bullet *toRemove = bulletsHead;
+        Bullet *toRemove = GetBulletsHead();
         RemoveBullet(&toRemove);
     }
-    while (enemiesHead)
+    while (GetEnemiesHead())
     {
-        Enemy *toRemove = enemiesHead;
+        Enemy *toRemove = GetEnemiesHead();
         RemoveEnemy(&toRemove);
     }
 }

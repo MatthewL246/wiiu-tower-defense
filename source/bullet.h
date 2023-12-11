@@ -17,7 +17,7 @@ typedef struct Bullet
     struct Bullet *next;
 } Bullet;
 
-extern Bullet *bulletsHead;
+Bullet *GetBulletsHead(void);
 
 int AddBullet(Tower *fromTower);
 
