@@ -29,7 +29,7 @@ void CheckBulletEnemyCollisions(void)
                 currentEnemy->health -= currentBullet->damage;
                 bool shouldReturn = false;
 
-                if (currentBullet->health == 0)
+                if (currentBullet->health <= 0)
                 {
                     Bullet *previous = currentBullet->previous;
                     RemoveBullet(&currentBullet);
@@ -42,7 +42,7 @@ void CheckBulletEnemyCollisions(void)
                         shouldReturn = true;
                     }
                 }
-                if (currentEnemy->health == 0)
+                if (currentEnemy->health <= 0)
                 {
                     Enemy *previous = currentEnemy->previous;
                     RemoveEnemy(&currentEnemy);

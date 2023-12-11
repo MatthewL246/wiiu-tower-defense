@@ -18,7 +18,7 @@ typedef struct Enemy
     // This is the enemy's speed in pixels per SPEED_CONSTANT game loops.
     unsigned int speed;
     // This is the amount of health that the enemy has.
-    unsigned int health;
+    int health;
     // This is a pointer to the previous enemy in the linked list.
     struct Enemy *previous;
     // This is a pointer to the next enemy in the linked list.

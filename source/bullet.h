@@ -22,7 +22,7 @@ typedef struct Bullet
     // This is the amount of damage that the bullet does to enemies.
     unsigned int damage;
     // This is the amount of health that the bullet has.
-    unsigned int health;
+    int health;
     // This is a pointer to the previous bullet in the linked list.
     struct Bullet *previous;
     // This is a pointer to the next bullet in the linked list.
