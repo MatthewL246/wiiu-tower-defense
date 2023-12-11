@@ -100,7 +100,7 @@ void DrawEnemyPath(const Point *path)
 
 void DrawAllTowers(void)
 {
-    Color towerTargetColor = (Color){155, 155, 0};
+    Color towerTargetColor = (Color){255, 155, 0};
     for (Tower *currentTower = GetTowersHead(); currentTower; currentTower = currentTower->next)
     {
         DrawPoint(currentTower->position, currentTower->color, currentTower->size, true);
