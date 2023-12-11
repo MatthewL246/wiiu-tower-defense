@@ -77,7 +77,7 @@ void RemoveBullet(Bullet **bulletPointer)
     *bulletPointer = NULL;
 }
 
-void MoveAllBullets(int gameLoopCounter)
+void MoveAllBullets(unsigned int gameLoopCounter)
 {
     for (Bullet *currentBullet = bulletsHead; currentBullet; currentBullet = currentBullet->next)
     {
@@ -116,7 +116,7 @@ void MoveAllBullets(int gameLoopCounter)
             currentBullet->pathError = dx - dy;
         }
 
-        for (int i = 0; i < MAX(currentBullet->speed / SPEED_CONSTANT, 1); i++)
+        for (unsigned int i = 0; i < MAX(currentBullet->speed / SPEED_CONSTANT, 1); i++)
         {
             int error2 = 2 * currentBullet->pathError;
             if (error2 > -dy)

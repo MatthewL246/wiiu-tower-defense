@@ -9,9 +9,9 @@ typedef struct Tower
     Point position;
     Point targetPosition;
     Color color;
-    int size;
+    unsigned int size;
     Bullet *bulletsFired;
-    int fireRate;
+    unsigned int fireRate;
     struct Tower *previous;
     struct Tower *next;
 } Tower;
@@ -24,4 +24,4 @@ void RemoveTower(Tower **towerPointer);
 
 void SetLastTowerTarget(Point targetPosition);
 
-int FireAllTowers(unsigned gameLoopCounter);
+int FireAllTowers(unsigned int gameLoopCounter);

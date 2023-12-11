@@ -92,7 +92,7 @@ void RemoveEnemy(Enemy **enemyPointer)
     *enemyPointer = NULL;
 }
 
-void MoveAllEnemies(int gameLoopCounter)
+void MoveAllEnemies(unsigned int gameLoopCounter)
 {
     for (Enemy *currentEnemy = enemiesHead; currentEnemy; currentEnemy = currentEnemy->next)
     {
@@ -136,7 +136,7 @@ void MoveAllEnemies(int gameLoopCounter)
             currentEnemy->pathError = dx - dy;
         }
 
-        for (int i = 0; i < MAX(currentEnemy->speed / SPEED_CONSTANT, 1); i++)
+        for (unsigned int i = 0; i < MAX(currentEnemy->speed / SPEED_CONSTANT, 1); i++)
         {
             int error2 = 2 * currentEnemy->pathError;
             if (error2 > -dy)

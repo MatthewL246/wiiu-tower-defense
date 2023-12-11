@@ -22,9 +22,9 @@ bool VectorsEqual(Vector a, Vector b);
 
 typedef struct Color
 {
-    char r;
-    char g;
-    char b;
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
 } Color;
 
 bool ColorsEqual(Color a, Color b);

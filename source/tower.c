@@ -110,7 +110,7 @@ void RemoveTower(Tower **towerPointer)
     *towerPointer = NULL;
 }
 
-int FireAllTowers(unsigned gameLoopCounter)
+int FireAllTowers(unsigned int gameLoopCounter)
 {
     for (Tower *currentTower = towersHead; currentTower; currentTower = currentTower->next)
     {

@@ -74,7 +74,8 @@ int GameLoop(VPADStatus status, OSTick deltaTime)
     VPADTouchData touchData = status.tpNormal;
     if (touchData.touched != 0)
     {
-        Point screenTouchPoint = MapTouchToDrcScreen(touchData.x, touchData.y);
+        Point touchPoint = (Point){touchData.x, touchData.y};
+        Point screenTouchPoint = MapTouchToDrcScreen(touchPoint);
         DrawPoint(screenTouchPoint, (Color){255, 255, 255}, 10, false);
         touchTimer++;
         if (touchTimer == touchDelay && !targetMode)
@@ -159,7 +160,7 @@ void ProfilerStartFrame(void)
 
 void ProfilerLogTime(char *title, OSTick time)
 {
-    unsigned frametimeMicroseconds = OSTicksToMicroseconds(time);
+    unsigned int frametimeMicroseconds = OSTicksToMicroseconds(time);
     char profilerLogString[100];
     snprintf(profilerLogString, sizeof(profilerLogString) / sizeof(char), "%s: %.2f ms", title, frametimeMicroseconds / 1000.0);
     OSScreenPutFontEx(SCREEN_DRC, 0, profilerMessageCounter, profilerLogString);

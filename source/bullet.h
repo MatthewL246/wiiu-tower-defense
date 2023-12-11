@@ -9,10 +9,10 @@ typedef struct Bullet
     Point initialPosition;
     Point targetPosition;
     int pathError;
-    int size;
-    int speed;
-    int damage;
-    int health;
+    unsigned int size;
+    unsigned int speed;
+    unsigned int damage;
+    unsigned int health;
     struct Bullet *previous;
     struct Bullet *next;
 } Bullet;
@@ -23,4 +23,4 @@ int AddBullet(Tower *fromTower);
 
 void RemoveBullet(Bullet **bulletPointer);
 
-void MoveAllBullets(int gameLoopCounter);
+void MoveAllBullets(unsigned int gameLoopCounter);

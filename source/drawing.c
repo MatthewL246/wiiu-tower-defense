@@ -15,11 +15,11 @@ const int DRC_TOUCH_BOTTOM = 180;
 const int DRC_TOUCH_LEFT = 100;
 const int DRC_TOUCH_RIGHT = 3960;
 
-Point MapTouchToDrcScreen(int touchX, int touchY)
+Point MapTouchToDrcScreen(Point touchPoint)
 {
     Point screenPoint;
-    screenPoint.x = ((touchX - DRC_TOUCH_LEFT) / (float)(DRC_TOUCH_RIGHT - DRC_TOUCH_LEFT)) * DRC_SCREEN_WIDTH;
-    screenPoint.y = DRC_SCREEN_HEIGHT - (((touchY - DRC_TOUCH_BOTTOM) / (float)(DRC_TOUCH_TOP - DRC_TOUCH_BOTTOM)) * DRC_SCREEN_HEIGHT);
+    screenPoint.x = ((touchPoint.x - DRC_TOUCH_LEFT) / (float)(DRC_TOUCH_RIGHT - DRC_TOUCH_LEFT)) * DRC_SCREEN_WIDTH;
+    screenPoint.y = DRC_SCREEN_HEIGHT - (((touchPoint.y - DRC_TOUCH_BOTTOM) / (float)(DRC_TOUCH_TOP - DRC_TOUCH_BOTTOM)) * DRC_SCREEN_HEIGHT);
 
     return screenPoint;
 }
@@ -29,7 +29,7 @@ const int TV_HEIGHT = 720;
 const float tvScaleX = (float)TV_WIDTH / DRC_SCREEN_WIDTH;
 const float tvScaleY = (float)TV_HEIGHT / DRC_SCREEN_HEIGHT;
 
-void DrawPoint(Point point, Color color, int size, bool drawOnBothScreens)
+void DrawPoint(Point point, Color color, unsigned int size, bool drawOnBothScreens)
 {
     int pixelColor = color.r << 24 | color.g << 16 | color.b << 8;
     int halfSize = size / 2;
@@ -58,7 +58,7 @@ void DrawPoint(Point point, Color color, int size, bool drawOnBothScreens)
     }
 }
 
-void DrawLine(Point start, Point end, Color color, int width, bool drawOnBothScreens)
+void DrawLine(Point start, Point end, Color color, unsigned int width, bool drawOnBothScreens)
 {
     // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
     int dx = abs(end.x - start.x);
