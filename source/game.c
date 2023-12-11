@@ -23,7 +23,7 @@ void CheckBulletEnemyCollisions(void)
         {
             int hitSize = (currentEnemy->size + currentBullet->size) / 2;
 
-            if (PointInTolerance(currentBullet->position, currentEnemy->position, hitSize))
+            if (PointsWithinTolerance(currentBullet->position, currentEnemy->position, hitSize))
             {
                 currentBullet->health -= 1;
                 currentEnemy->health -= currentBullet->damage;

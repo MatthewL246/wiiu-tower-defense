@@ -99,7 +99,7 @@ void MoveAllEnemies(int gameLoopCounter)
         Point target = enemyPath[currentEnemy->pathIndex];
         Point lastTarget = enemyPath[currentEnemy->pathIndex - (currentEnemy->pathIndex == 0 ? 0 : 1)];
 
-        if (PointEquals(target, INVALID_POINT))
+        if (PointsEqual(target, INVALID_POINT))
         {
             // The enemy is at the end of its path
             Enemy *previous = currentEnemy->previous;
@@ -146,7 +146,7 @@ void MoveAllEnemies(int gameLoopCounter)
             }
         }
 
-        if (PointInTolerance(currentEnemy->position, target, MAX(currentEnemy->speed / SPEED_CONSTANT, 1)))
+        if (PointsWithinTolerance(currentEnemy->position, target, MAX(currentEnemy->speed / SPEED_CONSTANT, 1)))
         {
             // The enemy has reached the path target
             // Snap its position to the target to prevent offsets

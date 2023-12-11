@@ -8,9 +8,9 @@ typedef struct Point
     int y;
 } Point;
 
-bool PointEquals(Point a, Point b);
+bool PointsEqual(Point a, Point b);
 
-bool PointInTolerance(Point a, Point b, int tolerance);
+bool PointsWithinTolerance(Point a, Point b, int tolerance);
 
 typedef struct Vector
 {
@@ -18,7 +18,7 @@ typedef struct Vector
     float y;
 } Vector;
 
-bool VectorEquals(Vector a, Vector b);
+bool VectorsEqual(Vector a, Vector b);
 
 typedef struct Color
 {
@@ -27,4 +27,4 @@ typedef struct Color
     char b;
 } Color;
 
-bool ColorEquals(Color a, Color b);
+bool ColorsEqual(Color a, Color b);

@@ -109,7 +109,7 @@ int FireAllTowers(unsigned gameLoopCounter)
 {
     for (Tower *currentTower = towersHead; currentTower; currentTower = currentTower->next)
     {
-        if (!PointEquals(currentTower->targetPosition, INVALID_POINT) && gameLoopCounter % (SPEED_CONSTANT / currentTower->fireRate) == 0)
+        if (!PointsEqual(currentTower->targetPosition, INVALID_POINT) && gameLoopCounter % (SPEED_CONSTANT / currentTower->fireRate) == 0)
         {
             int result = AddBullet(currentTower);
             if (result != 0)

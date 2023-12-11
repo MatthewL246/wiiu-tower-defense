@@ -67,7 +67,7 @@ void DrawLine(Point start, Point end, Color color, int width, bool drawOnBothScr
     int signY = start.y < end.y ? 1 : -1;
     int error = dx - dy;
 
-    while (!PointEquals(start, end))
+    while (!PointsEqual(start, end))
     {
         DrawPoint(start, color, width, drawOnBothScreens);
         int error2 = 2 * error;
@@ -87,7 +87,7 @@ void DrawLine(Point start, Point end, Color color, int width, bool drawOnBothScr
 void DrawEnemyPath(const Point *path)
 {
     int i = 0;
-    while (!PointEquals(path[i + 1], INVALID_POINT))
+    while (!PointsEqual(path[i + 1], INVALID_POINT))
     {
         Color pathColor = (Color){50, 50, 50};
         DrawLine(path[i], path[i + 1], pathColor, 2, true);
@@ -100,7 +100,7 @@ void DrawAllTowers(void)
     for (Tower *currentTower = towersHead; currentTower; currentTower = currentTower->next)
     {
         DrawPoint(currentTower->position, currentTower->color, currentTower->size, true);
-        if (!PointEquals(currentTower->targetPosition, INVALID_POINT))
+        if (!PointsEqual(currentTower->targetPosition, INVALID_POINT))
         {
             DrawPoint(currentTower->targetPosition, (Color){255, 155, 0}, 10, true);
         }
